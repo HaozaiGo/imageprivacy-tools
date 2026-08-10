@@ -14,6 +14,43 @@ Create or update one Vercel project per app, all connected to the same GitHub re
 | `imageprivacy-compress` | `apps/compress` | `compress.imageprivacy.org` |
 | `imageprivacy-convert` | `apps/convert` | `convert.imageprivacy.org` |
 
+## Current Vercel Mapping
+
+All seven Vercel projects are connected to the same GitHub repository:
+
+```txt
+HaozaiGo/imageprivacy-tools
+```
+
+Configured Root Directory values:
+
+- `imageprivacy-home` -> `apps/home`
+- `tools-exif-remover` -> `apps/exif`
+- `tools-watermark-tool` -> `apps/watermark`
+- `imageprivacy-redact` -> `apps/redact`
+- `imageprivacy-resize` -> `apps/resize`
+- `imageprivacy-compress` -> `apps/compress`
+- `imageprivacy-convert` -> `apps/convert`
+
+## Cloudflare DNS Records
+
+Existing records already point to Vercel:
+
+- `imageprivacy.org`
+- `exif.imageprivacy.org`
+- `watermark.imageprivacy.org`
+
+Add these new records in Cloudflare:
+
+| Type | Name | Target |
+| --- | --- | --- |
+| `CNAME` | `redact` | `cname.vercel-dns.com` |
+| `CNAME` | `resize` | `cname.vercel-dns.com` |
+| `CNAME` | `compress` | `cname.vercel-dns.com` |
+| `CNAME` | `convert` | `cname.vercel-dns.com` |
+
+If Cloudflare proxying causes validation trouble, set these records to DNS only until Vercel shows the domains as valid.
+
 ## SEO and GEO Requirements
 
 Keep these files in each app root:
