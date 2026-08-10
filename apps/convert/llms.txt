@@ -1,12 +1,12 @@
 # Image Converter
 
-Image Converter is a browser-based tool for converting images between PNG, JPEG, and WebP.
+Image Converter is a browser-based tool for converting images between HEIC, PNG, JPEG, and WebP.
 
 Canonical URL: https://convert.imageprivacy.org/
 
 ## Features
 
-- Convert images to WebP, JPEG, or PNG
+- Convert HEIC, WebP, JPEG, or PNG images to WebP, JPEG, or PNG
 - Choose quality for compressed formats
 - Set a background color for JPEG exports
 - Process images locally in the browser

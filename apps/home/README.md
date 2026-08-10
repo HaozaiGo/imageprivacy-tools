@@ -14,7 +14,7 @@ Navigation homepage for ImagePrivacy.
 - https://redact.imageprivacy.org/ - visible sensitive area redaction
 - https://resize.imageprivacy.org/ - browser image resizing
 - https://compress.imageprivacy.org/ - browser image compression
-- https://convert.imageprivacy.org/ - PNG, JPEG, and WebP conversion
+- https://convert.imageprivacy.org/ - HEIC, PNG, JPEG, and WebP conversion
 
 ## Deployment
 

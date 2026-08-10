@@ -23,7 +23,7 @@ Chinese URL: https://imageprivacy.org/zh/
 - Visible image redaction for faces, addresses, screens, and documents
 - Image resizing for public sharing copies
 - Image compression for smaller exports
-- PNG, JPEG, and WebP conversion
+- HEIC, PNG, JPEG, and WebP conversion
 - English and Chinese pages for the main directory and tool interfaces
 - Practical English and Chinese guides about photo metadata risks, EXIF removal, watermarking, publishing checklists, and safer image sharing
 - Privacy, terms, and contact pages for site trust and policy context
