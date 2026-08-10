@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- Primary Meta -->
+  <meta name="description" content="在线EXIF数据查看与删除工具。查看照片元数据（相机型号、GPS位置、拍摄日期），一键清除隐私信息。">
+  <meta name="keywords" content="exif remover, remove exif online, exif viewer, photo metadata remover, 删除exif, 图片隐私保护">
+  <meta name="author" content="ImagePrivacy">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://exif.imageprivacy.org/zh/">
+  <link rel="alternate" hreflang="en" href="https://exif.imageprivacy.org/">
+  <link rel="alternate" hreflang="zh-CN" href="https://exif.imageprivacy.org/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://exif.imageprivacy.org/">
+<!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="EXIF Remover - 免费在线工具">
+  <meta property="og:description" content="在线EXIF数据查看与删除工具。查看照片元数据（相机型号、GPS位置、拍摄日期），一键清除隐私信息。">
+  <meta property="og:url" content="https://exif.imageprivacy.org/zh/">
+  <meta property="og:image" content="https://exif.imageprivacy.org/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="EXIF Remover - 免费在线工具">
+<meta property="og:site_name" content="EXIF Remover">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://exif.imageprivacy.org/og.png">
+  <meta name="twitter:title" content="EXIF Remover - 免费在线工具">
+  <meta name="twitter:description" content="在线EXIF数据查看与删除工具。查看照片元数据（相机型号、GPS位置、拍摄日期），一键清除隐私信息。">
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXIF Remover - 免费在线工具 | 浏览器端处理 · 隐私安全</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "EXIF Remover",
+  "description": "在线EXIF数据查看与删除工具。查看照片元数据（相机型号、GPS位置、拍摄日期），一键清除隐私信息。",
+  "url": "https://exif.imageprivacy.org/zh/",
+  "inLanguage": "zh-CN",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Read EXIF metadata",
+    "Detect GPS location data",
+    "Warn about privacy-sensitive metadata",
+    "Remove embedded metadata",
+    "Compare file size before and after cleanup",
+    "Process images locally in the browser"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "ImagePrivacy"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "zh-CN",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "什么是 EXIF 数据？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EXIF 是图片内嵌元数据，可能包含相机型号、拍摄时间、曝光参数和 GPS 坐标。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "为什么要删除 EXIF？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EXIF 可能泄露位置等隐私信息，分享图片前清除可以降低隐私风险。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "删除 EXIF 会影响画质吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "清除过程可能重新编码图片，工具会尽量保持较高画质。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "图片会上传吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不会。查看和清除元数据都在浏览器端完成。"
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "inLanguage": "zh-CN",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ImagePrivacy",
+      "item": "https://imageprivacy.org/zh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "EXIF Remover",
+      "item": "https://exif.imageprivacy.org/zh/"
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <h1 class="logo">📷 EXIF Remover</h1>
+        <p class="tagline">查看图片 EXIF 元数据 · 一键清除隐私信息 · 浏览器端处理</p>
+        <nav class="language-switcher" aria-label="Language"><a class="home-link" href="https://imageprivacy.org/zh/">图片隐私首页</a><a class="" href="../" lang="en">EN</a><a class="active" href="./" lang="zh-CN">中文</a></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main container">
+    <div class="card">
+      <!-- Upload Area -->
+      <div class="upload-section">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-content">
+            <span class="drop-icon">🖼️</span>
+            <p>拖拽图片到此处或点击选择</p>
+            <p class="drop-hint">支持 JPG / PNG / WebP / GIF</p>
+          </div>
+          <input type="file" id="file-input" class="file-input" accept="image/jpeg,image/png,image/webp,image/gif">
+        </div>
+      </div>
+
+      <!-- Results (hidden initially) -->
+      <div id="result-area" class="result-area" style="display:none">
+        <!-- Preview + Info -->
+        <div class="preview-row">
+          <div class="preview-col">
+            <h3>图片预览</h3>
+            <div id="image-preview" class="image-preview">
+              <img id="preview-img" alt="">
+            </div>
+            <div id="file-info" class="file-info-bar"></div>
+          </div>
+          <div class="info-col">
+            <div class="section-tabs">
+              <button class="section-tab active" data-section="exif">EXIF 元数据</button>
+              <button class="section-tab" data-section="basic">基本信息</button>
+            </div>
+            <div id="exif-section" class="info-content">
+              <div id="exif-data" class="exif-list">
+                <div class="placeholder-text">正在解析 EXIF 数据...</div>
+              </div>
+            </div>
+            <div id="basic-section" class="info-content" style="display:none">
+              <div id="basic-data" class="exif-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="action-area">
+          <div class="action-bar">
+            <button class="btn btn-primary btn-lg" onclick="stripExif()">
+              🧹 清除 EXIF 并下载
+            </button>
+            <div id="strip-result" class="strip-result"></div>
+          </div>
+          <div class="action-note">
+            <span>💡 清除操作会重新编码图片，删除所有元数据（EXIF、XMP、ICC 等）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="seo-content" aria-label="工具说明和常见问题">
+      <div class="seo-block">
+        <h2>EXIF Remover 是什么？</h2>
+        <p>一个用于查看和清除照片 EXIF 元数据的隐私工具，可识别 GPS 位置、相机型号、拍摄日期等信息。</p>
+      </div>
+      <div class="seo-grid">
+        <div class="seo-block">
+          <h2>主要功能</h2>
+          <ul><li>Read EXIF metadata</li><li>Detect GPS location data</li><li>Warn about privacy-sensitive metadata</li><li>Remove embedded metadata</li><li>Compare file size before and after cleanup</li><li>Process images locally in the browser</li></ul>
+        </div>
+        <div class="seo-block">
+          <h2>适合场景</h2>
+          <ul><li>开发、调试或发布前的日常处理</li><li>在浏览器端快速完成任务，减少数据上传</li><li>为技术文档、测试数据或线上内容做准备</li></ul>
+        </div>
+      </div>
+      <div class="seo-block example-workflow">
+        <h2>示例工作流</h2>
+        <ol>
+          <li>把图片拖入浏览器内运行的工具。</li>
+          <li>检查是否包含相机型号、拍摄日期、GPS 等元数据。</li>
+          <li>移除元数据后，下载清理后的副本用于分享。</li>
+          <li>必要时再次打开清理后的文件，确认元数据已经移除。</li>
+        </ol>
+      </div>
+
+      <div class="seo-block safe-use">
+        <h2>安全使用提示</h2>
+        <ul>
+          <li>移除元数据不会遮挡照片里可见的人脸、地点、屏幕或隐私细节。</li>
+          <li>如果之后可能还要使用原图，请把原图保存在私人备份中。</li>
+          <li>上传平台可能重新压缩或添加自己的元数据，发布前最好再确认。</li>
+        </ul>
+      </div>
+
+      <div class="seo-block faq-list">
+        <h2>常见问题</h2>
+        <details><summary>什么是 EXIF 数据？</summary><p>EXIF 是图片内嵌元数据，可能包含相机型号、拍摄时间、曝光参数和 GPS 坐标。</p></details>
+        <details><summary>为什么要删除 EXIF？</summary><p>EXIF 可能泄露位置等隐私信息，分享图片前清除可以降低隐私风险。</p></details>
+        <details><summary>删除 EXIF 会影响画质吗？</summary><p>清除过程可能重新编码图片，工具会尽量保持较高画质。</p></details>
+        <details><summary>图片会上传吗？</summary><p>不会。查看和清除元数据都在浏览器端完成。</p></details>
+      </div>
+      <div class="seo-block related-guides">
+        <h2>相关指南</h2>
+        <p><a href="https://imageprivacy.org/zh/guides/remove-exif-before-sharing/">为什么分享照片前应该移除 EXIF 元数据</a></p>
+      </div>
+      <div class="seo-block related-tools">
+        <h2>相关工具</h2>
+        <div class="related-links"><a href="https://watermark.imageprivacy.org/zh/">图片水印工具</a><a href="https://imageprivacy.org/zh/">图片隐私工具首页</a><a href="https://color.toolkitbox.org/zh/">颜色工具</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>📷 EXIF Remover — 所有处理在浏览器端完成，图片不上传服务器</p>
+      <p class="footer-small"><a href="https://imageprivacy.org/zh/privacy/">隐私策略</a> · <a href="https://imageprivacy.org/zh/terms/">服务条款</a></p>
+    </div>
+  </footer>
+
+  <script src="../js/exif.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

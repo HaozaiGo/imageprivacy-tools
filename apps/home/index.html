@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Private browser-based image tools for removing EXIF metadata, adding watermarks, and preparing safer shared copies before publishing.">
+  <meta name="keywords" content="image privacy, exif remover, remove photo metadata, watermark image, private image tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://imageprivacy.org/">
+  <link rel="alternate" hreflang="en" href="https://imageprivacy.org/">
+  <link rel="alternate" hreflang="zh-CN" href="https://imageprivacy.org/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://imageprivacy.org/">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ImagePrivacy - Private EXIF and Watermark Tools">
+  <meta property="og:description" content="Remove photo metadata, add watermarks, and prepare images for safer sharing in your browser.">
+  <meta property="og:url" content="https://imageprivacy.org/">
+  <meta property="og:site_name" content="ImagePrivacy">
+  <meta property="og:image" content="https://imageprivacy.org/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ImagePrivacy - Private Image Tools">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://imageprivacy.org/og.png">
+  <title>ImagePrivacy - Private EXIF and Watermark Tools</title>
+  <style>
+    :root{color-scheme:light;--ink:#1b2430;--muted:#5d6673;--line:#d9dfd9;--paper:#fbfcfa;--panel:#fff;--green:#0f8a6a;--blue:#2563eb;--amber:#b45309;--red:#b93c36}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}a{color:inherit}.top{position:sticky;top:0;z-index:2;border-bottom:1px solid rgba(217,223,217,.9);background:rgba(251,252,250,.92);backdrop-filter:blur(12px)}.nav{max-width:1040px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:750;letter-spacing:0}.mark{width:28px;height:28px;display:grid;place-items:center;border:1px solid #b8c6be;border-radius:7px;background:#fff;overflow:hidden}.mark img{display:block;width:22px;height:22px;object-fit:contain}.nav-links{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;line-height:1;flex-wrap:wrap;justify-content:flex-end}.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--ink)}main{max-width:1040px;margin:0 auto;padding:34px 20px 56px}.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,390px);gap:28px;align-items:center;padding-bottom:24px}h1{margin:0 0 12px;font-size:44px;line-height:1.02;letter-spacing:0}.lead{margin:0;max-width:620px;color:var(--muted);font-size:18px;line-height:1.55}.hero-points{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.hero-points span{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:12px;font-weight:650;line-height:1;padding:7px 9px;white-space:nowrap}.trust-strip{margin-top:4px;padding:12px 14px;border:1px solid #cfe3dc;border-radius:8px;background:#f4fbf8;color:#355e55;font-size:14px;line-height:1.55}.scene{width:100%;aspect-ratio:16/10;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}.scene canvas{display:block;width:100%;height:100%}.group{margin-top:28px}.group h2{margin:0 0 12px;font-size:16px;letter-spacing:0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.section-head h2{margin:0}.view-all{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:13px;font-weight:650;line-height:1;padding:8px 11px;text-decoration:none}.view-all:hover{color:var(--ink);border-color:#a9b4c7}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:28px}.section-head+.grid{margin-top:0}.card{min-height:160px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:18px;border:1px solid var(--line);border-radius:8px;background:var(--panel);text-decoration:none;box-shadow:0 1px 2px rgba(27,36,48,.04)}.card:hover{border-color:#aab8ad;transform:translateY(-1px)}.card-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.card strong{font-size:18px;letter-spacing:0}.card span{color:var(--muted);font-size:14px;line-height:1.45}.icon{flex:0 0 auto;width:38px;height:38px;border-radius:7px;display:grid;place-items:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;background:#f3f7f3;border:1px solid #dce5de}.green{color:var(--green)}.blue{color:var(--blue)}footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}footer a{text-decoration:none}@media(max-width:800px){.intro{grid-template-columns:1fr}h1{font-size:36px}}@media(max-width:640px){.nav{align-items:flex-start;flex-direction:column}.nav-links{justify-content:flex-start}}@media(max-width:560px){main{padding-top:26px}.grid{grid-template-columns:1fr}h1{font-size:32px}.lead{font-size:16px}.scene{aspect-ratio:4/3}.section-head{align-items:flex-start}}
+
+    /* Mobile ad-safety and overflow guard */
+    html, body { max-width: 100%; overflow-x: hidden; }
+    .nav, main, .intro, .scene, .grid, .card { min-width: 0; }
+    .scene { max-width: 100%; }
+    .lead, .card span, .nav-links { overflow-wrap: anywhere; }
+    @media (max-width: 560px) {
+      .nav, main { width: 100%; }
+      main, .nav { max-width: 100vw; }
+      .intro, .grid, .scene { width: 100%; max-width: calc(100vw - 40px); }
+      .lead { width: 100%; max-width: 32ch; }
+      .scene canvas { max-width: 100%; }
+
+      .intro { overflow: hidden; }
+      .scene { width: 100%; max-width: 100%; }
+      .nav-links { row-gap: 8px; }
+      .card { min-height: auto; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://imageprivacy.org/#organization",
+        "name": "ImagePrivacy",
+        "url": "https://imageprivacy.org/",
+        "logo": "https://imageprivacy.org/logo.svg",
+        "sameAs": [
+          "https://github.com/HaozaiGo"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://imageprivacy.org/#website",
+        "name": "ImagePrivacy",
+        "url": "https://imageprivacy.org/",
+        "description": "Private browser tools for EXIF metadata removal, photo privacy checks, and image watermark workflows.",
+        "inLanguage": "en",
+        "publisher": {
+          "@id": "https://imageprivacy.org/#organization"
+        }
+      }
+    ]
+  }
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046"
+     crossorigin="anonymous"></script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+  <header class="top"><nav class="nav" aria-label="Main navigation"><div class="brand"><span class="mark"><img src="logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/about/">About</a><span>·</span><a href="/contact/">Contact</a><span>·</span><a href="/guides/">Guides</a><span>·</span><a href="/zh/">中文</a></div></nav></header>
+  <main>
+    <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">Private browser image tools for removing metadata, adding watermarks, and preparing safer shared copies. No upload. No account.</p><div class="hero-points" aria-label="ImagePrivacy highlights"><span>Privacy-first</span><span>Runs in your browser</span><span>No account</span><span>Publishing checklist</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
+    <p class="trust-strip">Most image workflows should keep originals private. Use a cleaned copy for sharing, and check both hidden metadata and visible content before publishing.</p>
+    <section class="grid" aria-label="Image privacy tools">
+      <a class="card" href="https://exif.imageprivacy.org/"><div class="card-top"><strong>EXIF Remover</strong><span class="icon green">EX</span></div><span>Inspect and remove hidden photo metadata before sharing a public copy.</span></a>
+      <a class="card" href="https://watermark.imageprivacy.org/"><div class="card-top"><strong>Watermark Tool</strong><span class="icon blue">WM</span></div><span>Add readable text watermarks for previews, proofs, listings, and public images.</span></a>
+      <a class="card" href="https://redact.imageprivacy.org/"><div class="card-top"><strong>Image Redactor</strong><span class="icon green">RD</span></div><span>Hide faces, addresses, screens, documents, and other visible private details.</span></a>
+      <a class="card" href="https://resize.imageprivacy.org/"><div class="card-top"><strong>Image Resizer</strong><span class="icon blue">RS</span></div><span>Create smaller public copies while keeping original images private.</span></a>
+      <a class="card" href="https://compress.imageprivacy.org/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>Reduce image file size for sharing, tickets, listings, and web publishing.</span></a>
+      <a class="card" href="https://convert.imageprivacy.org/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>Convert PNG, JPEG, and WebP in the browser and export a clean copy.</span></a>
+    </section>
+    <section class="group" aria-labelledby="latest-guides">
+      <div class="section-head"><h2 id="latest-guides">Latest guides</h2><a class="view-all" href="/guides/">View all guides</a></div>
+      <div class="grid">
+        <a class="card" href="/guides/remove-exif-before-sharing/"><div class="card-top"><strong>Why You Should Remove EXIF Metadata Before Sharing Photos</strong><span class="icon blue">G</span></div><span>Learn what EXIF metadata can reveal and how to build a safer photo-sharing workflow.</span></a>
+        <a class="card" href="/guides/photo-metadata-risks/"><div class="card-top"><strong>What Photo Metadata Can Reveal About You</strong><span class="icon blue">G</span></div><span>Understand common image metadata fields and the privacy risks they can create.</span></a>
+        <a class="card" href="/guides/watermark-images-online/"><div class="card-top"><strong>How to Watermark Images Without Overwhelming the Photo</strong><span class="icon blue">G</span></div><span>A practical guide to placing readable, tasteful watermarks for portfolios, previews, and public sharing.</span></a>
+        <a class="card" href="/guides/safe-image-sharing-workflow/"><div class="card-top"><strong>A Safer Workflow for Sharing Images Online</strong><span class="icon blue">G</span></div><span>Combine metadata cleanup, watermarking, file naming, and review steps before publishing images.</span></a>
+      </div>
+    </section>
+
+    <footer><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span></footer>
+  </main>
+  <script>
+    const canvas=document.getElementById("image-scene"),ctx=canvas.getContext("2d");function draw(){const r=canvas.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,r.width,r.height);ctx.fillStyle="#fff";ctx.fillRect(0,0,r.width,r.height);const t=Date.now()/1500;for(let i=0;i<9;i++){const x=18+(i%3)*(r.width-50)/2,y=18+Math.floor(i/3)*(r.height-50)/2,w=42,h=34;ctx.fillStyle=["#eef7f1","#eef4ff","#fff7ed"][i%3];ctx.strokeStyle=["#0f8a6a","#2563eb","#b45309"][i%3];ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect(x,y,w,h,6);ctx.fill();ctx.stroke();ctx.fillStyle=ctx.strokeStyle;ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(x+12+Math.sin(t+i)*2,y+12,4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.beginPath();ctx.moveTo(x+8,y+h-8);ctx.lineTo(x+19,y+20+Math.cos(t+i)*2);ctx.lineTo(x+28,y+h-8);ctx.lineTo(x+34,y+24);ctx.lineTo(x+w-7,y+h-8);ctx.stroke()}ctx.strokeStyle="#d6ded8";ctx.lineWidth=1;for(let x=12;x<r.width;x+=24){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,r.height);ctx.stroke()}for(let y=12;y<r.height;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(r.width,y);ctx.stroke()}requestAnimationFrame(draw)}draw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watermark Tool Online | Add Text Watermarks to Images</title>
+  <meta name="description" content="Add text watermarks to images online. Customize font, color, opacity, position, rotation, tiling, and export PNG or JPG in your browser.">
+  <meta name="keywords" content="watermark tool, add watermark, image watermark, photo watermark, text watermark, watermark photos online">
+  <meta name="author" content="ImagePrivacy">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://watermark.imageprivacy.org/">
+  <link rel="alternate" hreflang="en" href="https://watermark.imageprivacy.org/">
+  <link rel="alternate" hreflang="zh-CN" href="https://watermark.imageprivacy.org/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://watermark.imageprivacy.org/">
+<meta property="og:type" content="website">
+  <meta property="og:title" content="Watermark Tool Online | Add Text Watermarks to Images">
+  <meta property="og:description" content="Add text watermarks to images online. Customize font, color, opacity, position, rotation, tiling, and export PNG or JPG in your browser.">
+  <meta property="og:url" content="https://watermark.imageprivacy.org/">
+  <meta property="og:site_name" content="Watermark Tool">
+  <meta property="og:image" content="https://watermark.imageprivacy.org/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Watermark Tool Online | Add Text Watermarks to Images">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://watermark.imageprivacy.org/og.png">
+  <meta name="twitter:title" content="Watermark Tool Online | Add Text Watermarks to Images">
+  <meta name="twitter:description" content="Add text watermarks to images online. Customize font, color, opacity, position, rotation, tiling, and export PNG or JPG in your browser.">
+
+<link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Watermark Tool",
+  "description": "Add text watermarks to images online. Customize font, color, opacity, position, rotation, tiling, and export PNG or JPG in your browser.",
+  "url": "https://watermark.imageprivacy.org/",
+  "inLanguage": "en",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Upload and preview images",
+    "Add custom text watermarks",
+    "Adjust font, size, color, opacity, and rotation",
+    "Choose preset watermark positions",
+    "Use tiled watermark mode",
+    "Export PNG or JPG"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "ImagePrivacy"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "en",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I add a watermark online for free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The watermark tool runs in the browser and is free to use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are images uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Image preview, watermark rendering, and export happen locally in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which image formats are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Common formats such as JPG, PNG, WebP, GIF, and BMP are supported for input. Export supports PNG and JPG."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I control watermark placement?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can choose preset positions, margins, rotation, opacity, and tiled mode."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "inLanguage": "en",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ImagePrivacy",
+      "item": "https://imageprivacy.org/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Watermark Tool",
+      "item": "https://watermark.imageprivacy.org/"
+    }
+  ]
+}
+  </script>
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+  <!-- Vercel Speed Insights -->
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <h1 class="logo">💧 Watermark Tool</h1>
+        <p class="tagline">Add image watermarks · customize text, position, opacity, and export format</p>
+        <nav class="language-switcher" aria-label="Language"><a class="home-link" href="https://imageprivacy.org/">ImagePrivacy</a><a class="active" href="./" lang="en">EN</a><a class="" href="zh/" lang="zh-CN">中文</a></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main container">
+    <div class="card">
+      <!-- Upload -->
+      <div class="upload-section" id="upload-section">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-content">
+            <span class="drop-icon">🖼️</span>
+            <p>Drop an image here or click to choose</p>
+            <p class="drop-hint">Supports JPG / PNG / WebP / GIF / BMP</p>
+          </div>
+          <input type="file" id="file-input" class="file-input" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Editor -->
+      <div id="editor-section" class="editor-section" style="display:none">
+        <div class="editor-layout">
+          <!-- Preview -->
+          <div class="preview-col">
+            <div class="preview-header">
+              <h3>Preview</h3>
+              <span id="img-info" class="img-info"></span>
+            </div>
+            <div id="canvas-container" class="canvas-container">
+              <canvas id="preview-canvas"></canvas>
+            </div>
+            <div class="preview-actions">
+              <div class="zoom-controls">
+                <button class="btn btn-sm" onclick="zoomOut()">🔍−</button>
+                <span id="zoom-level" class="zoom-level">100%</span>
+                <button class="btn btn-sm" onclick="zoomIn()">🔍+</button>
+                <button class="btn btn-sm" onclick="fitView()">Fit</button>
+              </div>
+              <div class="export-controls">
+                <select id="export-format" class="small-select">
+                  <option value="image/png">PNG (lossless)</option>
+                  <option value="image/jpeg">JPG (compressed)</option>
+                </select>
+                <select id="export-quality" class="small-select" style="display:none">
+                  <option value="0.9">High quality 90%</option>
+                  <option value="0.8" selected>Medium 80%</option>
+                  <option value="0.6">Low 60%</option>
+                </select>
+                <button class="btn btn-primary" onclick="downloadImage()">Download</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls-col">
+            <div class="control-group">
+              <h3>Watermark text</h3>
+              <input type="text" id="wm-text" class="text-input" value="© ImagePrivacy" oninput="renderWatermark()">
+            </div>
+
+            <div class="control-group">
+              <h3>Font</h3>
+              <select id="wm-font" class="small-select" onchange="renderWatermark()">
+                <option value="Arial">Arial</option>
+                <option value="'Helvetica Neue'">Helvetica Neue</option>
+                <option value="Georgia">Georgia</option>
+                <option value="'Times New Roman'">Times New Roman</option>
+                <option value="'Courier New'">Courier New</option>
+                <option value="'Microsoft YaHei'">Microsoft YaHei</option>
+                <option value="'Noto Sans SC'">Noto Sans SC</option>
+                <option value="Impact">Impact</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <h3>Font size</h3>
+              <div class="slider-row">
+                <input type="range" id="wm-size" min="12" max="200" value="48" oninput="updateSizeLabel();renderWatermark()">
+                <span id="wm-size-label" class="slider-val">48px</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <h3>Opacity</h3>
+              <div class="slider-row">
+                <input type="range" id="wm-opacity" min="0.05" max="1" step="0.05" value="0.4" oninput="updateOpacityLabel();renderWatermark()">
+                <span id="wm-opacity-label" class="slider-val">40%</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <h3>Color</h3>
+              <div class="color-row">
+                <input type="color" id="wm-color" value="#ffffff" onchange="renderWatermark()">
+                <input type="color" id="wm-shadow" value="#000000" onchange="renderWatermark()">
+                <label class="checkbox-label"><input type="checkbox" id="wm-shadow-enable" checked onchange="renderWatermark()"> Shadow</label>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <h3>Rotation</h3>
+              <div class="slider-row">
+                <input type="range" id="wm-rotation" min="-90" max="90" value="-30" oninput="updateRotationLabel();renderWatermark()">
+                <span id="wm-rotation-label" class="slider-val">-30°</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <h3>Position</h3>
+              <div class="position-grid">
+                <button class="pos-btn" data-pos="top-left">↖</button>
+                <button class="pos-btn" data-pos="top-center">↑</button>
+                <button class="pos-btn" data-pos="top-right">↗</button>
+                <button class="pos-btn" data-pos="center-left">←</button>
+                <button class="pos-btn active" data-pos="center">●</button>
+                <button class="pos-btn" data-pos="center-right">→</button>
+                <button class="pos-btn" data-pos="bottom-left">↙</button>
+                <button class="pos-btn" data-pos="bottom-center">↓</button>
+                <button class="pos-btn" data-pos="bottom-right">↘</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <h3>Margin</h3>
+              <div class="slider-row">
+                <input type="range" id="wm-margin" min="0" max="100" value="20" oninput="updateMarginLabel();renderWatermark()">
+                <span id="wm-margin-label" class="slider-val">20px</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="checkbox-label" style="font-size:.85rem">
+                <input type="checkbox" id="wm-tiled" onchange="renderWatermark()">
+                Tile watermark across the image
+              </label>
+            </div>
+
+            <div class="control-group">
+              <label class="checkbox-label" style="font-size:.85rem">
+                <input type="checkbox" id="wm-bold" onchange="renderWatermark()">
+                Bold
+              </label>
+              <label class="checkbox-label" style="font-size:.85rem">
+                <input type="checkbox" id="wm-italic" onchange="renderWatermark()">
+                Italic
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="seo-content" aria-label="Tool guide and frequently asked questions">
+      <div class="seo-block">
+        <h2>What is Watermark Tool?</h2>
+        <p>An online image watermark tool for adding customizable text watermarks to photos. Images are processed in the browser and are not uploaded.</p>
+      </div>
+      <div class="seo-grid">
+        <div class="seo-block">
+          <h2>Key Features</h2>
+          <ul><li>Upload and preview images</li><li>Add custom text watermarks</li><li>Adjust font, size, color, opacity, and rotation</li><li>Choose preset watermark positions</li><li>Use tiled watermark mode</li><li>Export PNG or JPG</li></ul>
+        </div>
+        <div class="seo-block">
+          <h2>Common Use Cases</h2>
+          <ul><li>Protect product photos</li><li>Brand social images</li><li>Prepare previews for clients</li><li>Add copyright marks before publishing</li></ul>
+        </div>
+      </div>
+      <div class="seo-block example-workflow">
+        <h2>Example workflow</h2>
+        <ol>
+          <li>Upload the image you want to mark.</li>
+          <li>Enter watermark text and choose position, opacity, scale, rotation, or repeated tiling.</li>
+          <li>Preview the result at the size where the image will be shared.</li>
+          <li>Export the final image and keep the original file separately.</li>
+        </ol>
+      </div>
+
+      <div class="seo-block safe-use">
+        <h2>Safe use tips</h2>
+        <ul>
+          <li>A watermark helps attribution but is not legal proof of ownership by itself.</li>
+          <li>Avoid covering important content, faces, product details, or required disclosures.</li>
+          <li>Keep unwatermarked originals and source files in a secure private archive.</li>
+        </ul>
+      </div>
+
+      <div class="seo-block faq-list">
+        <h2>Frequently Asked Questions</h2>
+        <details><summary>Can I add a watermark online for free?</summary><p>Yes. The watermark tool runs in the browser and is free to use.</p></details>
+        <details><summary>Are images uploaded to a server?</summary><p>No. Image preview, watermark rendering, and export happen locally in your browser.</p></details>
+        <details><summary>Which image formats are supported?</summary><p>Common formats such as JPG, PNG, WebP, GIF, and BMP are supported for input. Export supports PNG and JPG.</p></details>
+        <details><summary>Can I control watermark placement?</summary><p>Yes. You can choose preset positions, margins, rotation, opacity, and tiled mode.</p></details>
+      </div>
+      <div class="seo-block related-guides">
+        <h2>Related guide</h2>
+        <p><a href="https://imageprivacy.org/guides/watermark-images-online/">How to watermark images without overwhelming the photo</a></p>
+      </div>
+      <div class="seo-block related-tools">
+        <h2>Related tools</h2>
+        <div class="related-links"><a href="https://exif.imageprivacy.org/">EXIF Remover</a><a href="https://imageprivacy.org/">ImagePrivacy Tools</a><a href="https://color.toolkitbox.org/">Color Tool</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>💧 Watermark Tool — All image processing runs in your browser. Images are not uploaded.</p>
+      <p class="footer-small"><a href="https://imageprivacy.org/privacy/">Privacy</a> · <a href="https://imageprivacy.org/terms/">Terms</a></p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

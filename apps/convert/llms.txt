@@ -1,0 +1,16 @@
+# Image Converter
+
+Image Converter is a browser-based tool for converting images between PNG, JPEG, and WebP.
+
+Canonical URL: https://convert.imageprivacy.org/
+
+## Features
+
+- Convert images to WebP, JPEG, or PNG
+- Choose quality for compressed formats
+- Set a background color for JPEG exports
+- Process images locally in the browser
+
+## Privacy model
+
+The selected image is converted using browser canvas. Exporting creates a new metadata-light copy.

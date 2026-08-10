@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Primary Meta -->
+  <meta name="description" content="View and remove EXIF metadata from photos online. Clear GPS location, camera details, dates, and privacy-sensitive image data in your browser.">
+  <meta name="keywords" content="exif remover, remove exif online, exif viewer, photo metadata remover, remove gps from photo, image privacy tool">
+  <meta name="author" content="ImagePrivacy">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://exif.imageprivacy.org/">
+  <link rel="alternate" hreflang="en" href="https://exif.imageprivacy.org/">
+  <link rel="alternate" hreflang="zh-CN" href="https://exif.imageprivacy.org/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://exif.imageprivacy.org/">
+<!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="EXIF Remover Online | View and Remove Photo Metadata">
+  <meta property="og:description" content="View and remove EXIF metadata from photos online. Clear GPS location, camera details, dates, and privacy-sensitive image data in your browser.">
+  <meta property="og:url" content="https://exif.imageprivacy.org/">
+  <meta property="og:image" content="https://exif.imageprivacy.org/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="EXIF Remover Online | View and Remove Photo Metadata">
+<meta property="og:site_name" content="EXIF Remover">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://exif.imageprivacy.org/og.png">
+  <meta name="twitter:title" content="EXIF Remover Online | View and Remove Photo Metadata">
+  <meta name="twitter:description" content="View and remove EXIF metadata from photos online. Clear GPS location, camera details, dates, and privacy-sensitive image data in your browser.">
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXIF Remover Online | View and Remove Photo Metadata</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "EXIF Remover",
+  "description": "View and remove EXIF metadata from photos online. Clear GPS location, camera details, dates, and privacy-sensitive image data in your browser.",
+  "url": "https://exif.imageprivacy.org/",
+  "inLanguage": "en",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Read EXIF metadata",
+    "Detect GPS location data",
+    "Warn about privacy-sensitive metadata",
+    "Remove embedded metadata",
+    "Compare file size before and after cleanup",
+    "Process images locally in the browser"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "ImagePrivacy"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "en",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is EXIF data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EXIF data is metadata embedded in image files, often including camera model, capture date, exposure settings, and GPS coordinates."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why remove EXIF metadata?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EXIF can reveal private details such as where a photo was taken. Removing it helps protect privacy before sharing images."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will removing EXIF reduce image quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The image may be re-encoded, but the tool uses quality settings intended to preserve visual quality."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my photos uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Metadata inspection and cleanup happen in your browser."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "inLanguage": "en",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ImagePrivacy",
+      "item": "https://imageprivacy.org/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "EXIF Remover",
+      "item": "https://exif.imageprivacy.org/"
+    }
+  ]
+}
+  </script>
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+  <!-- Vercel Speed Insights -->
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <h1 class="logo">📷 EXIF Remover</h1>
+        <p class="tagline">View photo metadata · remove EXIF and GPS data · browser-based privacy tool</p>
+        <nav class="language-switcher" aria-label="Language"><a class="home-link" href="https://imageprivacy.org/">ImagePrivacy</a><a class="active" href="./" lang="en">EN</a><a class="" href="zh/" lang="zh-CN">中文</a></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main container">
+    <div class="card">
+      <!-- Upload Area -->
+      <div class="upload-section">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-content">
+            <span class="drop-icon">🖼️</span>
+            <p>Drop an image here or click to choose</p>
+            <p class="drop-hint">Supports JPG / PNG / WebP / GIF</p>
+          </div>
+          <input type="file" id="file-input" class="file-input" accept="image/jpeg,image/png,image/webp,image/gif">
+        </div>
+      </div>
+
+      <!-- Results (hidden initially) -->
+      <div id="result-area" class="result-area" style="display:none">
+        <!-- Preview + Info -->
+        <div class="preview-row">
+          <div class="preview-col">
+            <h3>Image preview</h3>
+            <div id="image-preview" class="image-preview">
+              <img id="preview-img" alt="">
+            </div>
+            <div id="file-info" class="file-info-bar"></div>
+          </div>
+          <div class="info-col">
+            <div class="section-tabs">
+              <button class="section-tab active" data-section="exif">EXIF metadata</button>
+              <button class="section-tab" data-section="basic">Basic info</button>
+            </div>
+            <div id="exif-section" class="info-content">
+              <div id="exif-data" class="exif-list">
+                <div class="placeholder-text">Reading EXIF data...</div>
+              </div>
+            </div>
+            <div id="basic-section" class="info-content" style="display:none">
+              <div id="basic-data" class="exif-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="action-area">
+          <div class="action-bar">
+            <button class="btn btn-primary btn-lg" onclick="stripExif()">
+              Remove EXIF and download
+            </button>
+            <div id="strip-result" class="strip-result"></div>
+          </div>
+          <div class="action-note">
+            <span>Cleanup re-encodes the image and removes all metadata (EXIF, XMP, ICC, and more)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="seo-content" aria-label="Tool guide and frequently asked questions">
+      <div class="seo-block">
+        <h2>What is EXIF Remover?</h2>
+        <p>A privacy-focused EXIF viewer and remover for inspecting photo metadata and stripping GPS location, camera details, dates, and other embedded data.</p>
+      </div>
+      <div class="seo-grid">
+        <div class="seo-block">
+          <h2>Key Features</h2>
+          <ul><li>Read EXIF metadata</li><li>Detect GPS location data</li><li>Warn about privacy-sensitive metadata</li><li>Remove embedded metadata</li><li>Compare file size before and after cleanup</li><li>Process images locally in the browser</li></ul>
+        </div>
+        <div class="seo-block">
+          <h2>Common Use Cases</h2>
+          <ul><li>Remove GPS data before sharing photos</li><li>Inspect camera metadata</li><li>Clean image files for publishing</li><li>Reduce privacy risk in uploaded photos</li></ul>
+        </div>
+      </div>
+      <div class="seo-block example-workflow">
+        <h2>Example workflow</h2>
+        <ol>
+          <li>Drop an image into the browser-based tool.</li>
+          <li>Inspect whether metadata such as camera model, date, or GPS fields are present.</li>
+          <li>Remove metadata and download a cleaned copy for sharing.</li>
+          <li>Open the cleaned file once more when you need to confirm the metadata was removed.</li>
+        </ol>
+      </div>
+
+      <div class="seo-block safe-use">
+        <h2>Safe use tips</h2>
+        <ul>
+          <li>Metadata removal does not blur faces, locations, screens, or visible private details inside the photo.</li>
+          <li>Keep the original image in a private backup if you may need it later.</li>
+          <li>Check the platform you upload to because some services recompress or add their own metadata.</li>
+        </ul>
+      </div>
+
+      <div class="seo-block faq-list">
+        <h2>Frequently Asked Questions</h2>
+        <details><summary>What is EXIF data?</summary><p>EXIF data is metadata embedded in image files, often including camera model, capture date, exposure settings, and GPS coordinates.</p></details>
+        <details><summary>Why remove EXIF metadata?</summary><p>EXIF can reveal private details such as where a photo was taken. Removing it helps protect privacy before sharing images.</p></details>
+        <details><summary>Will removing EXIF reduce image quality?</summary><p>The image may be re-encoded, but the tool uses quality settings intended to preserve visual quality.</p></details>
+        <details><summary>Are my photos uploaded?</summary><p>No. Metadata inspection and cleanup happen in your browser.</p></details>
+      </div>
+      <div class="seo-block related-guides">
+        <h2>Related guide</h2>
+        <p><a href="https://imageprivacy.org/guides/remove-exif-before-sharing/">Why you should remove EXIF metadata before sharing photos</a></p>
+      </div>
+      <div class="seo-block related-tools">
+        <h2>Related tools</h2>
+        <div class="related-links"><a href="https://watermark.imageprivacy.org/">Watermark Tool</a><a href="https://imageprivacy.org/">ImagePrivacy Tools</a><a href="https://color.toolkitbox.org/">Color Tool</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>📷 EXIF Remover — All image processing runs in your browser. Images are not uploaded.</p>
+      <p class="footer-small"><a href="https://imageprivacy.org/privacy/">Privacy</a> · <a href="https://imageprivacy.org/terms/">Terms</a></p>
+    </div>
+  </footer>
+
+  <script src="js/exif.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

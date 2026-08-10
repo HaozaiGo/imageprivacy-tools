@@ -1,0 +1,17 @@
+# Image Compressor
+
+Image Compressor is a browser-based tool for reducing image file size before publishing or sharing.
+
+Canonical URL: https://compress.imageprivacy.org/
+
+## Features
+
+- Compress images to JPEG or WebP
+- Choose output quality
+- Limit maximum width
+- Compare original and output file size
+- Process files locally in the browser
+
+## Privacy model
+
+The selected image is re-encoded in the browser. Exporting creates a metadata-light public copy.

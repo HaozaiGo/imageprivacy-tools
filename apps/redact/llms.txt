@@ -1,0 +1,16 @@
+# Image Redactor
+
+Image Redactor is a browser-based image privacy tool for hiding visible sensitive areas before sharing screenshots, photos, documents, or product images.
+
+Canonical URL: https://redact.imageprivacy.org/
+
+## Features
+
+- Draw redaction rectangles directly on an image
+- Use solid, blur, or pixelated redaction styles
+- Export a PNG copy from the browser
+- Process files locally without upload
+
+## Privacy model
+
+The selected image is decoded and edited in the browser using canvas. Exporting creates a new copy and removes most embedded metadata from the exported file.

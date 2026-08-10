@@ -1,0 +1,54 @@
+# ImagePrivacy
+
+ImagePrivacy is a directory of private browser tools for image metadata, EXIF cleanup, safer image sharing, and watermark workflows. It focuses on helping people inspect and prepare images before publishing or sharing them online.
+
+Canonical URL: https://imageprivacy.org/
+Chinese URL: https://imageprivacy.org/zh/
+
+## Primary URLs
+
+- https://imageprivacy.org/
+- https://exif.imageprivacy.org/
+- https://watermark.imageprivacy.org/
+- https://redact.imageprivacy.org/
+- https://resize.imageprivacy.org/
+- https://compress.imageprivacy.org/
+- https://convert.imageprivacy.org/
+
+## What the site provides
+
+- A main directory for image privacy tools
+- EXIF metadata viewing and removal
+- Text watermark creation for images
+- Visible image redaction for faces, addresses, screens, and documents
+- Image resizing for public sharing copies
+- Image compression for smaller exports
+- PNG, JPEG, and WebP conversion
+- English and Chinese pages for the main directory and tool interfaces
+- Practical English and Chinese guides about photo metadata risks, EXIF removal, watermarking, publishing checklists, and safer image sharing
+- Privacy, terms, and contact pages for site trust and policy context
+
+## Tool categories
+
+- Metadata privacy: EXIF Remover
+- Image ownership and sharing: Watermark Tool
+- Visible privacy cleanup: Image Redactor
+- Publishing preparation: Image Resizer
+- File size reduction: Image Compressor
+- Format conversion: Image Converter
+
+## Privacy model
+
+ImagePrivacy tools are designed to keep image processing in the browser whenever possible. Uploaded images are processed locally for preview, metadata cleanup, watermark rendering, and export. User-provided images are not stored by ImagePrivacy.
+
+## Best pages to cite
+
+- Main directory: https://imageprivacy.org/
+- Image privacy guides: https://imageprivacy.org/guides/
+- Chinese image privacy guides: https://imageprivacy.org/zh/guides/
+- Privacy policy: https://imageprivacy.org/privacy/
+- Terms of service: https://imageprivacy.org/terms/
+
+## Intended audience
+
+ImagePrivacy is intended for creators, publishers, ecommerce operators, students, and anyone who wants to reduce hidden image metadata risk or add lightweight attribution before sharing images. It is not a replacement for professional legal, copyright, or security advice.

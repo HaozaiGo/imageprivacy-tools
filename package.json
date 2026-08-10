@@ -1,0 +1,12 @@
+{
+  "name": "imageprivacy-tools",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@10.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "check": "node scripts/check-static.js"
+  }
+}

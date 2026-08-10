@@ -1,0 +1,16 @@
+# Image Resizer
+
+Image Resizer is a browser-based tool for resizing images and creating smaller public sharing copies.
+
+Canonical URL: https://resize.imageprivacy.org/
+
+## Features
+
+- Resize images by width and height
+- Keep aspect ratio
+- Export JPEG, PNG, or WebP
+- Process images locally in the browser
+
+## Privacy model
+
+The selected image is processed in the browser using canvas. Exporting creates a resized copy and removes most embedded metadata.

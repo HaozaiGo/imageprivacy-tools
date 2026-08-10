@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://compress.imageprivacy.org/sitemap.xml
