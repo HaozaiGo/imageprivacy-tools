@@ -27,6 +27,7 @@ Chinese URL: https://imageprivacy.org/zh/
 - English and Chinese pages for the main directory and tool interfaces
 - Practical English and Chinese guides about photo metadata risks, EXIF removal, watermarking, publishing checklists, and safer image sharing
 - Privacy, terms, and contact pages for site trust and policy context
+- A visible publishing workflow that separates hidden metadata risks from visible image content risks
 
 ## Tool categories
 
@@ -36,6 +37,10 @@ Chinese URL: https://imageprivacy.org/zh/
 - Publishing preparation: Image Resizer
 - File size reduction: Image Compressor
 - Format conversion: Image Converter
+
+## Publishing workflow
+
+ImagePrivacy recommends keeping the original image private, checking visible content first, removing hidden metadata, redacting sensitive regions when needed, adding watermarks for attribution or proof status, and exporting a resized or compressed public copy before sharing.
 
 ## Privacy model
 

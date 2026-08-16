@@ -12,6 +12,10 @@ Canonical URL: https://compress.imageprivacy.org/
 - Compare original and output file size
 - Process files locally in the browser
 
+## Recommended workflow
+
+Choose a target width, lower quality gradually, compare the preview with the original, and confirm important details remain readable. Compression reduces file size but does not hide visible private information.
+
 ## Privacy model
 
 The selected image is re-encoded in the browser. Exporting creates a metadata-light public copy.

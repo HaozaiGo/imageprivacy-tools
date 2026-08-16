@@ -43,6 +43,9 @@
       .card { min-height: auto; }
     }
   </style>
+  <style>
+    .content-section{margin-top:32px;padding-top:4px}.content-section h2{margin:0 0 12px;font-size:20px;letter-spacing:0}.content-section p{margin:0;color:var(--muted);font-size:15px;line-height:1.7}.content-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.content-panel{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:16px}.content-panel h3{margin:0 0 8px;font-size:15px;letter-spacing:0}.content-panel ul,.content-panel ol{margin:0;padding-left:19px;color:var(--muted);font-size:14px;line-height:1.65}.faq-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.faq-list details{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:14px 16px}.faq-list summary{cursor:pointer;font-weight:700;letter-spacing:0}.faq-list p{margin-top:9px;font-size:14px}@media(max-width:800px){.content-grid,.faq-list{grid-template-columns:1fr}}
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,6 +69,47 @@
         "inLanguage": "zh-CN",
         "publisher": {
           "@id": "https://imageprivacy.org/#organization"
+        }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "zh-CN",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ImagePrivacy 主要解决什么问题？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ImagePrivacy 帮助你在发布图片前准备更安全的公开副本，包括检查元数据、移除隐藏 EXIF、添加水印、遮挡可见隐私、调整尺寸、压缩和转换格式。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "图片工具会上传我的文件吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "这些工具按浏览器端处理设计。你可以在设备上生成清理后或调整后的副本，而不是把原图上传到服务器处理。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "删除 EXIF 就能隐藏所有隐私吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "不能。删除 EXIF 只能减少隐藏元数据风险，图片中可见的人脸、地址、屏幕、证件、车牌或文档内容仍需要人工检查和遮挡。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "应该先使用哪个工具？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "建议先检查可见内容，再移除元数据；如果有敏感区域就先遮挡，需要归属说明再添加水印，最后导出较小或压缩后的公开副本。"
         }
       }
     ]
@@ -98,6 +142,34 @@
         <a class="card" href="/zh/guides/photo-metadata-risks/"><div class="card-top"><strong>照片元数据可能暴露哪些信息</strong><span class="icon blue">G</span></div><span>理解常见图片元数据字段和它们可能造成的隐私风险。</span></a>
         <a class="card" href="/zh/guides/watermark-images-online/"><div class="card-top"><strong>如何给图片添加不过度干扰的水印</strong><span class="icon blue">G</span></div><span>为作品预览、公开分享和商品图添加清晰但克制的水印。</span></a>
         <a class="card" href="/zh/guides/safe-image-sharing-workflow/"><div class="card-top"><strong>更安全的在线图片分享流程</strong><span class="icon blue">G</span></div><span>发布前组合元数据清理、水印、文件命名和人工检查步骤。</span></a>
+      </div>
+    </section>
+    <section class="content-section" aria-labelledby="why-imageprivacy">
+      <h2 id="why-imageprivacy">一套实用的图片隐私发布流程</h2>
+      <p>ImagePrivacy 的核心思路很简单：原图尽量保留在私密位置，对外只发布清理过、检查过、尺寸合适的副本。隐藏元数据和画面中的可见内容是两类不同风险，所以在工单、商品页、作品集、社交平台或公开文档中分享图片前，两者都应该检查。</p>
+      <div class="content-grid">
+        <div class="content-panel"><h3>隐藏元数据</h3><ul><li>检查相机、软件、时间和 GPS 相关字段。</li><li>公开发布前移除 EXIF 元数据。</li><li>如果以后还要使用原图，请把原文件保存在私密存储中。</li></ul></div>
+        <div class="content-panel"><h3>可见隐私细节</h3><ul><li>检查人脸、地址、屏幕、证件和文档文字。</li><li>对不应公开的区域进行遮挡。</li><li>预览图、样张和归属说明可以使用水印。</li></ul></div>
+        <div class="content-panel"><h3>适合分享的导出</h3><ul><li>不需要原始分辨率时先调整尺寸。</li><li>为工单、表单和网页发布压缩文件体积。</li><li>把 HEIC、PNG、JPEG 或 WebP 转为目标平台支持的格式。</li></ul></div>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="publishing-checklist">
+      <h2 id="publishing-checklist">发布图片前的检查清单</h2>
+      <div class="content-grid">
+        <div class="content-panel"><h3>1. 检查画面内容</h3><p>放大查看图片中的可见信息。元数据清理不会隐藏屏幕文字、地址、人脸、工牌、发票或个人文档。</p></div>
+        <div class="content-panel"><h3>2. 创建公开副本</h3><p>完成遮挡、水印、尺寸调整或格式转换后导出新图片。请单独保存源文件，不要直接覆盖私密原图。</p></div>
+        <div class="content-panel"><h3>3. 再次复查结果</h3><p>上传前重新打开导出的文件，确认可见内容、尺寸、格式和文件名都适合目标平台。</p></div>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="imageprivacy-faq">
+      <h2 id="imageprivacy-faq">ImagePrivacy 常见问题</h2>
+      <div class="faq-list">
+        <details><summary>ImagePrivacy 主要解决什么问题？</summary><p>它帮助你准备更安全的公开图片副本，包括减少隐藏元数据、遮挡可见隐私、添加水印、调整尺寸、压缩和转换格式。</p></details>
+        <details><summary>工具会上传我的图片吗？</summary><p>这些工具按浏览器端处理设计。你可以在设备上生成清理后的副本，而不是把原图上传到服务器处理。</p></details>
+        <details><summary>删除 EXIF 就足够了吗？</summary><p>不一定。EXIF 清理只能减少隐藏元数据风险，图片里肉眼可见的信息仍然需要人工复查，必要时用遮挡工具处理。</p></details>
+        <details><summary>我应该分享原图吗？</summary><p>通常不建议。更稳妥的做法是分享经过清理、尺寸合适、格式正确且不包含多余可见信息的公开副本。</p></details>
       </div>
     </section>
     <footer><span><a href="/zh/privacy/">隐私策略</a> · <a href="/zh/terms/">服务条款</a></span></footer>

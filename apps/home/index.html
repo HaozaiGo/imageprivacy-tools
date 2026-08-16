@@ -45,6 +45,9 @@
       .card { min-height: auto; }
     }
   </style>
+  <style>
+    .content-section{margin-top:32px;padding-top:4px}.content-section h2{margin:0 0 12px;font-size:20px;letter-spacing:0}.content-section p{margin:0;color:var(--muted);font-size:15px;line-height:1.7}.content-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.content-panel{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:16px}.content-panel h3{margin:0 0 8px;font-size:15px;letter-spacing:0}.content-panel ul,.content-panel ol{margin:0;padding-left:19px;color:var(--muted);font-size:14px;line-height:1.65}.faq-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.faq-list details{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:14px 16px}.faq-list summary{cursor:pointer;font-weight:700;letter-spacing:0}.faq-list p{margin-top:9px;font-size:14px}@media(max-width:800px){.content-grid,.faq-list{grid-template-columns:1fr}}
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -68,6 +71,47 @@
         "inLanguage": "en",
         "publisher": {
           "@id": "https://imageprivacy.org/#organization"
+        }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "en",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does ImagePrivacy help with?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ImagePrivacy helps prepare safer public image copies by checking metadata, removing hidden EXIF data, adding watermarks, redacting visible private details, resizing, compressing, and converting files."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do the image tools upload my files?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tools are designed for browser-side processing. Your image should remain on your device while you create a new cleaned or resized copy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does removing EXIF hide everything private?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. EXIF removal reduces hidden metadata, but it does not hide visible faces, addresses, screens, documents, license plates, or other details inside the image."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which tool should I use first?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Start by checking visible content, then remove metadata, redact sensitive areas if needed, add a watermark when attribution matters, and export a resized or compressed public copy."
         }
       }
     ]
@@ -100,6 +144,35 @@
         <a class="card" href="/guides/photo-metadata-risks/"><div class="card-top"><strong>What Photo Metadata Can Reveal About You</strong><span class="icon blue">G</span></div><span>Understand common image metadata fields and the privacy risks they can create.</span></a>
         <a class="card" href="/guides/watermark-images-online/"><div class="card-top"><strong>How to Watermark Images Without Overwhelming the Photo</strong><span class="icon blue">G</span></div><span>A practical guide to placing readable, tasteful watermarks for portfolios, previews, and public sharing.</span></a>
         <a class="card" href="/guides/safe-image-sharing-workflow/"><div class="card-top"><strong>A Safer Workflow for Sharing Images Online</strong><span class="icon blue">G</span></div><span>Combine metadata cleanup, watermarking, file naming, and review steps before publishing images.</span></a>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="why-imageprivacy">
+      <h2 id="why-imageprivacy">A practical image privacy workflow</h2>
+      <p>ImagePrivacy is built around a simple idea: keep the original image private, then publish a smaller, cleaned, reviewed copy. Hidden metadata and visible content are different risks, so a good publishing workflow should check both before an image is shared in a support ticket, marketplace listing, portfolio, social post, or public document.</p>
+      <div class="content-grid">
+        <div class="content-panel"><h3>Hidden metadata</h3><ul><li>Inspect camera, software, time, and GPS-related fields.</li><li>Remove EXIF data before publishing public copies.</li><li>Keep the original file in private storage when you may need it later.</li></ul></div>
+        <div class="content-panel"><h3>Visible private details</h3><ul><li>Look for faces, addresses, screens, IDs, and document text.</li><li>Redact areas that should not appear in the shared copy.</li><li>Use watermarks for proofs, previews, and ownership context.</li></ul></div>
+        <div class="content-panel"><h3>Share-ready export</h3><ul><li>Resize images when full resolution is unnecessary.</li><li>Compress files for tickets, forms, and web publishing.</li><li>Convert HEIC, PNG, JPEG, or WebP into the format your platform accepts.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="publishing-checklist">
+      <h2 id="publishing-checklist">Before you publish an image</h2>
+      <div class="content-grid">
+        <div class="content-panel"><h3>1. Review the picture</h3><p>Zoom in and check the visible scene. Metadata cleanup will not hide screen text, addresses, faces, badges, invoices, or personal documents.</p></div>
+        <div class="content-panel"><h3>2. Create a public copy</h3><p>Export a new image after redaction, watermarking, resizing, or conversion. Keep the source file separate and do not overwrite your private original.</p></div>
+        <div class="content-panel"><h3>3. Recheck the result</h3><p>Open the exported file once more before uploading it. Confirm the visible content, dimensions, format, and file name are appropriate for the destination.</p></div>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="imageprivacy-faq">
+      <h2 id="imageprivacy-faq">ImagePrivacy FAQ</h2>
+      <div class="faq-list">
+        <details><summary>What does ImagePrivacy help with?</summary><p>It helps you prepare safer public copies of images by reducing hidden metadata, redacting visible details, adding watermarks, resizing, compressing, and converting formats.</p></details>
+        <details><summary>Do the tools upload my files?</summary><p>The tools are designed for browser-side processing. Your image should remain on your device while you create a new cleaned copy.</p></details>
+        <details><summary>Does removing EXIF hide everything private?</summary><p>No. EXIF removal reduces hidden metadata, but visible information inside the image still needs manual review and redaction when necessary.</p></details>
+        <details><summary>Should I share the original image?</summary><p>Usually no. Share a cleaned copy that has only the size, format, metadata, and visible details needed for the public context.</p></details>
       </div>
     </section>
 

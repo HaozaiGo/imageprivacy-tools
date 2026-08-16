@@ -11,6 +11,10 @@ Canonical URL: https://redact.imageprivacy.org/
 - Export a PNG copy from the browser
 - Process files locally without upload
 
+## Recommended workflow
+
+Review the image at full size, cover every sensitive area, export a new flattened copy, and reopen the exported file before sharing. For high-risk information, solid redaction boxes are safer than blur or pixelation.
+
 ## Privacy model
 
 The selected image is decoded and edited in the browser using canvas. Exporting creates a new copy and removes most embedded metadata from the exported file.

@@ -11,6 +11,10 @@ Canonical URL: https://resize.imageprivacy.org/
 - Export JPEG, PNG, or WebP
 - Process images locally in the browser
 
+## Recommended workflow
+
+Start from a private original, choose the smallest dimensions that still show the necessary detail, keep the aspect ratio locked unless a platform requires an exact crop, and export a separate public copy.
+
 ## Privacy model
 
 The selected image is processed in the browser using canvas. Exporting creates a resized copy and removes most embedded metadata.

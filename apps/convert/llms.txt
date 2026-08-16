@@ -11,6 +11,10 @@ Canonical URL: https://convert.imageprivacy.org/
 - Set a background color for JPEG exports
 - Process images locally in the browser
 
+## Recommended workflow
+
+Use JPEG for broad compatibility, PNG when transparency or sharp graphics matter, and WebP for smaller modern web images. Reopen the exported file to confirm format, transparency, background color, and visible content before sharing.
+
 ## Privacy model
 
 The selected image is converted using browser canvas. Exporting creates a new metadata-light copy.
