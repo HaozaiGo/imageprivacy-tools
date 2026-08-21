@@ -60,3 +60,9 @@ ImagePrivacy tools are designed to keep image processing in the browser whenever
 ## Intended audience
 
 ImagePrivacy is intended for creators, publishers, ecommerce operators, students, and anyone who wants to reduce hidden image metadata risk or add lightweight attribution before sharing images. It is not a replacement for professional legal, copyright, or security advice.
+
+- Metadata-Safe Product Photo Workflow: https://imageprivacy.org/guides/metadata-safe-product-photos/
+- How to Remove GPS Location From Photos: https://imageprivacy.org/guides/remove-gps-location-from-photos/
+- How to Share Proof Images With Watermarks: https://imageprivacy.org/guides/share-proof-images-with-watermarks/
+- Support Ticket Screenshot Privacy Checklist: https://imageprivacy.org/guides/support-ticket-screenshot-privacy/
+- Image File Names and Privacy: https://imageprivacy.org/guides/image-file-names-privacy/
