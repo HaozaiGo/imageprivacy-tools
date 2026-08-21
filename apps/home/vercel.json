@@ -1,15 +1,15 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "www.imageprivacy.org"
         }
       ],
-      "destination": "https://imageprivacy.org/:path*",
-      "permanent": true
+      "destination": "https://imageprivacy.org/$1",
+      "statusCode": 301
     }
   ]
 }
