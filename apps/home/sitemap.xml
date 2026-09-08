@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://imageprivacy.org/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/</loc>
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/about/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/privacy/</loc>
@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/about/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/privacy/</loc>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/guides/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/guides/image-privacy-checklist-before-publishing/</loc>
@@ -82,7 +82,7 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/guides/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/guides/image-privacy-checklist-before-publishing/</loc>
@@ -160,4 +160,8 @@
     <loc>https://imageprivacy.org/zh/guides/image-file-names-privacy/</loc>
     <lastmod>2026-08-21</lastmod>
   </url>
+  <url><loc>https://imageprivacy.org/guides/verify-image-metadata-removal/</loc><lastmod>2026-09-07</lastmod></url>
+  <url><loc>https://imageprivacy.org/zh/guides/verify-image-metadata-removal/</loc><lastmod>2026-09-07</lastmod></url>
+  <url><loc>https://imageprivacy.org/guides/photo-privacy-threat-model/</loc><lastmod>2026-09-07</lastmod></url>
+  <url><loc>https://imageprivacy.org/zh/guides/photo-privacy-threat-model/</loc><lastmod>2026-09-07</lastmod></url>
 </urlset>
