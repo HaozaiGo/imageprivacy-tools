@@ -67,6 +67,17 @@ body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-heigh
 .action-note{font-size:.75rem;color:var(--text-dim)}
 
 .strip-result{font-size:.82rem;color:var(--text-muted)}
+.privacy-report{margin-top:4px;padding-top:18px;border-top:1px solid var(--border)}
+.report-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.report-header h2{font-size:1rem;letter-spacing:0;margin:2px 0 0}
+.report-kicker{display:block;color:var(--primary);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.report-item{min-width:0;padding:11px 12px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-xs)}
+.report-label{display:block;color:var(--text-dim);font-size:.7rem;margin-bottom:3px}
+.report-value{display:block;color:var(--text);font-size:.8rem;font-weight:600;overflow-wrap:anywhere}
+.report-value.ok{color:var(--success)}
+.report-value.warn{color:var(--warning)}
+.report-note{margin-top:12px;color:var(--text-muted);font-size:.75rem;line-height:1.55}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--radius-xs);font-size:.82rem;font-family:var(--font-ui);font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
@@ -128,4 +139,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .input-row .btn, .action-bar .btn { flex: 1 1 auto; }
   .code-editor { min-height: 220px; }
   .toast { width: calc(100vw - 32px); text-align: center; }
+  .report-header { align-items:stretch; flex-direction:column; }
+  .report-header .btn { width:100%; }
+  .report-grid { grid-template-columns:1fr; }
 }

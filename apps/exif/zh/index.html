@@ -124,6 +124,7 @@
   ]
 }
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046" crossorigin="anonymous"></script>
 </head>
 <body>
   <header class="header">
@@ -189,6 +190,14 @@
             <span>💡 清除操作会重新编码图片，删除所有元数据（EXIF、XMP、ICC 等）</span>
           </div>
         </div>
+        <section id="privacy-report" class="privacy-report" hidden aria-live="polite">
+          <div class="report-header">
+            <div><span class="report-kicker">导出验证</span><h2>隐私处理报告</h2></div>
+            <button id="copy-report" class="btn btn-sm" type="button">复制报告</button>
+          </div>
+          <div id="privacy-report-grid" class="report-grid"></div>
+          <p id="privacy-report-note" class="report-note"></p>
+        </section>
       </div>
     </div>
     <section class="seo-content" aria-label="工具说明和常见问题">
@@ -223,6 +232,10 @@
           <li>如果之后可能还要使用原图，请把原图保存在私人备份中。</li>
           <li>上传平台可能重新压缩或添加自己的元数据，发布前最好再确认。</li>
         </ul>
+      </div>
+      <div class="seo-block">
+        <h2>隐私报告会验证什么</h2>
+        <p>导出后，工具会显示准确的输出文件大小，并重新检查 JPEG 副本中是否还能读取 EXIF 字段。报告不会把画面可见信息或所有厂商私有元数据描述为绝对安全，这些内容仍需最后人工检查。</p>
       </div>
 
       <div class="seo-block faq-list">

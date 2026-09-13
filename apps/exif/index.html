@@ -129,6 +129,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <!-- Vercel Speed Insights -->
   <script defer src="/_vercel/speed-insights/script.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046" crossorigin="anonymous"></script>
 </head>
 <body>
   <header class="header">
@@ -194,6 +195,14 @@
             <span>Cleanup re-encodes the image and removes all metadata (EXIF, XMP, ICC, and more)</span>
           </div>
         </div>
+        <section id="privacy-report" class="privacy-report" hidden aria-live="polite">
+          <div class="report-header">
+            <div><span class="report-kicker">Export verification</span><h2>Privacy processing report</h2></div>
+            <button id="copy-report" class="btn btn-sm" type="button">Copy report</button>
+          </div>
+          <div id="privacy-report-grid" class="report-grid"></div>
+          <p id="privacy-report-note" class="report-note"></p>
+        </section>
       </div>
     </div>
     <section class="seo-content" aria-label="Tool guide and frequently asked questions">
@@ -228,6 +237,10 @@
           <li>Keep the original image in a private backup if you may need it later.</li>
           <li>Check the platform you upload to because some services recompress or add their own metadata.</li>
         </ul>
+      </div>
+      <div class="seo-block">
+        <h2>What the privacy report verifies</h2>
+        <p>After export, the tool reports the exact output size and checks a JPEG copy again for readable EXIF fields. The report does not claim that visible details or every possible proprietary metadata block are safe; those still require a final review.</p>
       </div>
 
       <div class="seo-block faq-list">

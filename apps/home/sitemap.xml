@@ -10,11 +10,11 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/about/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-08</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/privacy/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-08</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/terms/</loc>
@@ -26,11 +26,11 @@
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/about/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-08</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/privacy/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-08</lastmod>
   </url>
   <url>
     <loc>https://imageprivacy.org/zh/terms/</loc>
@@ -164,4 +164,8 @@
   <url><loc>https://imageprivacy.org/zh/guides/verify-image-metadata-removal/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://imageprivacy.org/guides/photo-privacy-threat-model/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://imageprivacy.org/zh/guides/photo-privacy-threat-model/</loc><lastmod>2026-09-07</lastmod></url>
+  <url><loc>https://imageprivacy.org/editorial-policy/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://imageprivacy.org/zh/editorial-policy/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://imageprivacy.org/changelog/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://imageprivacy.org/zh/changelog/</loc><lastmod>2026-09-08</lastmod></url>
 </urlset>
