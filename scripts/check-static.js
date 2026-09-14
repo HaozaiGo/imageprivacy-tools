@@ -37,6 +37,15 @@ for (const [name, canonical] of apps) {
     }
   }
 
+  if (name === "compress") {
+    for (const asset of ["app.css", "app.js"]) {
+      if (!fs.existsSync(path.join(root, asset))) {
+        console.error(`[compress] missing ${asset}`);
+        failures++;
+      }
+    }
+  }
+
   const robotsPath = path.join(root, "robots.txt");
   if (fs.existsSync(robotsPath)) {
     const robots = fs.readFileSync(robotsPath, "utf8");

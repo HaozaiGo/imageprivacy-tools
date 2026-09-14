@@ -6,16 +6,17 @@ Canonical URL: https://compress.imageprivacy.org/
 
 ## Features
 
-- Compress images to JPEG or WebP
-- Choose output quality
-- Limit maximum width
-- Compare original and output file size
-- Process files locally in the browser
+- Batch process up to 20 HEIC, JPEG, PNG, WebP, or AVIF images
+- Export JPEG, WebP, quantized PNG, or AVIF
+- Choose output quality, maximum width, and an optional target size
+- Compare original and compressed images with an interactive slider
+- Download individual results or a ZIP archive
+- Process files locally in the browser without uploading image bytes
 
 ## Recommended workflow
 
-Choose a target width, lower quality gradually, compare the preview with the original, and confirm important details remain readable. Compression reduces file size but does not hide visible private information.
+Choose a target width, start around 75% quality, and optionally enter a target size. Compare each result with the original before downloading, and confirm that text, faces, product details, and gradients remain readable. Compression reduces file size but does not hide visible private information.
 
 ## Privacy model
 
-The selected image is re-encoded in the browser. Exporting creates a metadata-light public copy.
+Selected images are decoded, resized, re-encoded, compared, and packaged in the browser. Image bytes are not uploaded to ImagePrivacy. Exporting creates metadata-light public copies, but visible private details still require redaction.
