@@ -61,6 +61,7 @@ or a substitute for Google's content review.
 ```bash
 npm run test:tools
 npm run test:codecs
+npm run test:readiness
 SMOKE_ARTIFACTS=/tmp/imageprivacy-production-smoke npm run test:tools -- --online
 SMOKE_ARTIFACTS=/tmp/imageprivacy-production-codecs npm run test:codecs -- --online
 ```
@@ -72,6 +73,8 @@ app's pinned CDN dependencies and fetches one hash-verified HEIC fixture from
 the decoder's upstream repository. It also checks PNG output and ZIP integrity
 using the installed `unzip` command. Ads remain blocked. Results, dependency
 requests, synthetic downloads, and screenshots are written under `/tmp`.
+The readiness suite delays each application script and checks that native
+upload controls remain disabled until their handlers are installed.
 
 For the sibling ToolkitBox repositories, the shared runner lives in
 `json-toolbox/tests/toolkit-smoke.cjs`; use its `--help` command for dependency

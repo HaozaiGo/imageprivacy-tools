@@ -552,4 +552,5 @@
   });
 
   render();
+  elements.file.disabled = false;
 }());

@@ -32,6 +32,8 @@ SEO score, or a fixed wait after deployment.
 - Keep privacy choices reachable when a consent-provider API is unavailable.
 - Fix mobile table overflow, corrupt-file errors, stale downloads, decode
   races, and touch editing. Verify actual downloaded pixels and dimensions.
+- Gate upload controls until their event handlers are installed, including
+  after language navigation on slow connections.
 - Exercise developer-tool parsing, comparison, Unicode, generated values,
   invalid inputs, download handling, and expensive regular expressions.
 - Repair SSL API routing and test certificate trust and public-address
@@ -45,6 +47,9 @@ Local verification on the release source used Chrome 155.0.8059.85:
   across four viewport widths in the integrated crawl.
 - 30 ImagePrivacy functional scenarios passed, including downloaded pixels,
   nested EXIF/GPS input, touch redaction, corrupt files, and decode races.
+- 12 delayed-script initialization checks passed across all six tools in
+  both languages: upload remains disabled until handlers are registered,
+  then a real selection and decoded download succeeds.
 - 4 additional codec scenarios passed: one pinned upstream HEIC sample to
   PNG/JPEG/WebP in both languages, and real CDN-backed PNG encoding, resizing,
   ZIP integrity, and duplicate output filenames. This is one HEIC sample,

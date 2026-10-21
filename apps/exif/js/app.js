@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initUpload();
   initSectionTabs();
   document.getElementById('copy-report').addEventListener('click', copyPrivacyReport);
+  document.getElementById('file-input').disabled = false;
 });
 
 let currentFile = null;

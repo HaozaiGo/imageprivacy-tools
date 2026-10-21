@@ -151,4 +151,5 @@
       setTimeout(() => URL.revokeObjectURL(url), 1500);
     }, 'image/png');
   };
+  file.disabled = false;
 }());

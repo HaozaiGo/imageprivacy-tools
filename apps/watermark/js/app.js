@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initUpload();
   initPositionButtons();
   initExportFormat();
+  document.getElementById('file-input').disabled = false;
 });
 
 let sourceImage = null;

@@ -134,6 +134,8 @@ async function run() {
           if (!response.location) { issue(url, 'redirect-without-location', response.status); continue; }
           let destination = new URL(response.location, url);
           if (!online) { const localSite = sites.find(s => s.local === destination.origin); if (localSite) destination = new URL(destination.pathname + destination.search, localSite.origin); }
+          // Fragments identify a section of the same document, not a new canonical URL.
+          destination.hash = '';
           if (byOrigin.has(destination.origin)) queue.add(destination.href);
           continue;
         }

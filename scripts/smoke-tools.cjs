@@ -1,6 +1,7 @@
 // Default: isolated Chrome and loopback-only ephemeral servers.
 // --codecs: bounded HEIC/PNG/ZIP checks with real CDN dependencies.
 // --online: target public app origins instead of starting local servers.
+// --readiness: hold each app script and verify both language upload gates.
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const http = require('node:http');
@@ -13,11 +14,52 @@ const { expect } = require(path.join(playwrightPath, 'test'));
 const appsRoot = process.env.SMOKE_APPS_ROOT || path.resolve(__dirname, '../apps');
 const online = process.argv.includes('--online');
 const codecsOnly = process.argv.includes('--codecs');
+const readinessOnly = process.argv.includes('--readiness');
+assert(!(codecsOnly && readinessOnly), 'Choose either --codecs or --readiness');
 const allowCodecs = online || codecsOnly || process.env.SMOKE_ONLINE === '1';
 const artifacts = process.env.SMOKE_ARTIFACTS || (codecsOnly ? '/tmp/imageprivacy-codec-smoke' : '/tmp/imageprivacy-app-smoke');
 const apps = process.env.SMOKE_APPS ? process.env.SMOKE_APPS.split(',') : codecsOnly ? ['convert', 'compress'] : ['convert', 'compress', 'redact', 'resize', 'exif', 'watermark'];
 const results = [];
 const resources = [];
+
+function uploadInput(app) {
+  return ['exif', 'watermark'].includes(app) ? '#file-input' : '#file';
+}
+
+async function waitForUploadReady(page, app) {
+  // The application enables the native input only after upload handlers exist.
+  // URL navigation completion alone does not imply that parser-blocking scripts ran.
+  await expect(page.locator(uploadInput(app))).toBeEnabled({ timeout: 30000 });
+}
+
+async function uiState(page) {
+  const state = await page.evaluate(() => ({
+    url: location.href,
+    readyState: document.readyState,
+    inputs: Array.from(document.querySelectorAll('input[type="file"]')).map(input => ({ id: input.id, disabled: input.disabled, files: Array.from(input.files).map(file => file.name) })),
+    panels: ['editor', 'workspace', 'result-area', 'editor-section'].map(id => document.getElementById(id)).filter(Boolean).map(node => ({ id: node.id, hidden: node.hidden, display: getComputedStyle(node).display })),
+    download: document.getElementById('download') ? { disabled: document.getElementById('download').disabled } : null,
+    meta: document.getElementById('meta')?.textContent,
+    heicDecoder: typeof window.heic2any,
+    scripts: Array.from(document.scripts).filter(script => script.src).map(script => ({ src: script.src, async: script.async, defer: script.defer })),
+    resources: performance.getEntriesByType('resource').map(resource => ({ name: resource.name, responseEnd: resource.responseEnd }))
+  }));
+  const cdp = await page.context().newCDPSession(page);
+  try {
+    const { result } = await cdp.send('Runtime.evaluate', { expression: 'document.querySelector("input[type=file]")' });
+    if (result.objectId) {
+      const { listeners } = await cdp.send('DOMDebugger.getEventListeners', { objectId: result.objectId });
+      state.fileListenerTypes = listeners.map(listener => listener.type);
+    }
+  } finally { await cdp.detach(); }
+  return state;
+}
+
+async function captureFailure(page, label) {
+  await fs.writeFile(path.join(artifacts, `${label}-failure-state.json`), JSON.stringify(await uiState(page), null, 2) + '\n');
+  await fs.writeFile(path.join(artifacts, `${label}-failure.html`), await page.content());
+  await page.screenshot({ path: path.join(artifacts, `${label}-failure.png`), fullPage: true });
+}
 // Exact dependency URLs observed in the app HTML, not a wildcard CDN allowlist.
 const codecUrls = new Set([
   'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js',
@@ -212,6 +254,7 @@ async function runRaceCase(browser, app, origin, fixtures) {
   page.on('pageerror', error => errors.push(error.message));
   try {
     await page.goto(origin);
+    await waitForUploadReady(page, app);
     // Hold exactly one genuine browser decode to reproduce out-of-order completion.
     await page.evaluate(compressor => {
       const target = compressor ? window : HTMLImageElement.prototype;
@@ -257,6 +300,7 @@ async function runRaceCase(browser, app, origin, fixtures) {
     results.push({ label, status: 'pass' });
     console.log(`PASS ${label}: latest image wins${app === 'compress' ? ', queue capacity and clear-during-decode' : ''}`);
   } catch (error) {
+    await captureFailure(page, label);
     results.push({ label, status: 'fail', error: error.stack, pageErrors: errors });
     throw error;
   } finally { await context.close(); }
@@ -277,6 +321,7 @@ async function runCase(browser, app, origin, zh, mobile, fixtures) {
       await expect(page).toHaveURL(origin + '/zh/');
     }
     assert.equal(await page.locator('html').getAttribute('lang'), zh ? 'zh-CN' : 'en');
+    await waitForUploadReady(page, app);
     const input = app === 'exif' || app === 'watermark' ? '#file-input' : '#file';
     const dropzone = app === 'compress' ? '#dropzone' : app === 'exif' || app === 'watermark' ? '#drop-zone' : '.drop';
     const ready = app === 'compress' ? '[data-action="download"]' : app === 'exif' ? '[onclick="stripExif()"]' : app === 'watermark' ? '[onclick="downloadImage()"]' : '#download';
@@ -422,7 +467,7 @@ async function runCase(browser, app, origin, zh, mobile, fixtures) {
     results.push({ label, status: 'pass', download: output.filename, dimensions: `${decoded.width}x${decoded.height}` });
     console.log(`PASS ${label}: selection, export/decode, invalid image, drop/recovery, routing, pixels`);
   } catch (error) {
-    await page.screenshot({ path: path.join(artifacts, `${label}-failure.png`), fullPage: true });
+    await captureFailure(page, label);
     results.push({ label, status: 'fail', error: error.stack, pageErrors: errors });
     throw error;
   } finally { await context.close(); }
@@ -440,6 +485,7 @@ async function runCodecCase(browser, app, origin, zh, fixtures) {
   const evidence = { label, origin, status: 'pass', downloads: [] };
   try {
     await page.goto(origin + (zh ? '/zh/' : '/'), { waitUntil: 'load' });
+    await waitForUploadReady(page, app);
     if (app === 'convert') {
       assert.equal(await page.evaluate(() => typeof window.heic2any), 'function', 'Real CDN HEIC decoder must load');
       await page.evaluate(() => {
@@ -520,9 +566,73 @@ async function runCodecCase(browser, app, origin, zh, fixtures) {
     console.log(`PASS ${label}: ${app === 'convert' ? 'genuine HEIC to PNG/JPEG/WebP' : 'CDN PNG encode, resize, ZIP integrity and duplicate filenames'}`);
   } catch (error) {
     results.push({ ...evidence, status: 'fail', error: error.stack, pageErrors: errors });
-    await page.screenshot({ path: path.join(artifacts, `${label}-failure.png`), fullPage: true }).catch(() => {});
+    await captureFailure(page, label);
     throw error;
   } finally { await context.close(); }
+}
+
+async function runReadinessCase(browser, app, origin, zh, fixtures) {
+  const label = `${app}-${zh ? 'zh' : 'en'}-startup-gate`;
+  const context = await browser.newContext({ acceptDownloads: true, serviceWorkers: 'block' });
+  await networkPolicy(context, origin, label);
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const held = [];
+  await context.route('**/*', async route => {
+    const url = new URL(route.request().url());
+    if (url.origin === origin && ['/app.js', '/js/app.js'].includes(url.pathname)) {
+      held.push(url.href);
+      await gate;
+    }
+    await route.fallback();
+  });
+  const page = await context.newPage();
+  page.setDefaultTimeout(10000);
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  const evidence = { label, origin, heldScripts: held, status: 'pass' };
+  try {
+    await page.goto(origin + (zh ? '/zh/' : '/'), { waitUntil: 'commit' });
+    await expect.poll(() => held.length, { timeout: 10000 }).toBeGreaterThan(0);
+    const input = page.locator(uploadInput(app));
+    await expect(input).toBeAttached();
+    evidence.beforeRelease = await uiState(page);
+    await fs.writeFile(path.join(artifacts, `${label}-held.html`), await page.content());
+    assert.equal(evidence.beforeRelease.inputs.length, 1);
+    assert.equal(evidence.beforeRelease.inputs[0].disabled, true, 'Native file selection must be disabled while app initialization is held');
+    assert(!evidence.beforeRelease.fileListenerTypes.includes('change'), 'Upload handler must not have initialized while its script is held');
+    release();
+    await waitForUploadReady(page, app);
+    evidence.afterRelease = await uiState(page);
+    assert(evidence.afterRelease.fileListenerTypes.includes('change'), 'Enabling the input must follow change-handler registration');
+    const dropzone = app === 'compress' ? '#dropzone' : ['exif', 'watermark'].includes(app) ? '#drop-zone' : '.drop';
+    const ready = app === 'compress' ? '[data-action="download"]' : app === 'exif' ? '[onclick="stripExif()"]' : app === 'watermark' ? '[onclick="downloadImage()"]' : '#download';
+    const chooser = page.waitForEvent('filechooser');
+    await page.locator(dropzone).click();
+    await (await chooser).setFiles(fixtures.png);
+    if (app === 'compress') {
+      await expect(page.locator('#compress-all')).toBeEnabled();
+      await page.selectOption('#format', 'image/webp');
+      await page.locator('#compress-all').click();
+    }
+    await expect(page.locator(ready)).toBeVisible();
+    await expect(page.locator(ready)).toBeEnabled();
+    const output = await download(page, ready, label);
+    const decoded = await pixels(page, output.buffer, 'image/' + path.extname(output.filename).slice(1).replace('jpg', 'jpeg'));
+    assert.equal(decoded.width, 320); assert.equal(decoded.height, 240);
+    assert.deepEqual(errors, []);
+    evidence.download = { filename: output.filename, width: decoded.width, height: decoded.height, bytes: output.buffer.length };
+    evidence.afterUpload = await uiState(page);
+    results.push(evidence);
+    console.log(`PASS ${label}: disabled before app script, handler before enabled, real upload/download after release`);
+  } catch (error) {
+    await captureFailure(page, label);
+    results.push({ ...evidence, status: 'fail', error: error.stack, pageErrors: errors });
+    throw error;
+  } finally {
+    release();
+    await context.close();
+  }
 }
 
 async function main() {
@@ -587,7 +697,9 @@ async function main() {
     for (const app of apps) {
       const { server, origin } = online ? { server: null, origin: `https://${app}.imageprivacy.org` } : await serve(app);
       try {
-        if (codecsOnly) {
+        if (readinessOnly) {
+          for (const zh of [false, true]) await runReadinessCase(browser, app, origin, zh, fixtures);
+        } else if (codecsOnly) {
           for (const zh of [false, true]) await runCodecCase(browser, app, origin, zh, fixtures);
         } else {
           for (const mobile of [false, true]) for (const zh of [false, true]) await runCase(browser, app, origin, zh, mobile, fixtures);

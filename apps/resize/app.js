@@ -80,4 +80,5 @@
       if (request === revision) download.disabled = !image;
     }
   };
+  file.disabled = false;
 }());
