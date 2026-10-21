@@ -12,33 +12,35 @@
   <link rel="alternate" hreflang="x-default" href="https://imageprivacy.org/testing/">
   <link rel="icon" href="/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/legal.css">
-  <title>ImagePrivacy 如何测试图片隐私工具</title>
+  <title>图片工具验证清单与限制 - ImagePrivacy</title>
 </head>
 <body>
   <header class="top"><nav class="nav" aria-label="主导航"><a class="brand" href="/zh/">ImagePrivacy</a><div class="nav-links"><a href="/zh/guides/">指南</a><a href="/zh/about/">关于</a><a href="/zh/contact/">联系</a><a href="/testing/">English</a></div></nav></header>
   <main>
-    <div class="eyebrow">测试方法</div>
-    <h1>我们如何测试图片隐私工具，以及它们做不到什么。</h1>
-    <p class="lead">成功下载一张图片，不等于它已经适合公开。ImagePrivacy 把隐藏元数据、画面中的私密信息、导出质量和网络行为拆成可重复的检查，并且只使用专门制作的无隐私样例。</p>
-    <p class="guide-meta">ImagePrivacy 维护 · 2026 年 10 月 20 日复核 · 当前参考环境：macOS 上的 Chrome 155</p>
-    <section class="panel"><h2>可公开复现的测试样例</h2><p>测试集包含带无害 EXIF 字段的 JPEG、包含虚构账号信息的 PNG 截图、透明图片、高分辨率渐变图和 HEIC 样例，不需要任何用户私密照片。原图单独保留，所有导出结果都与同一来源比较。</p></section>
-    <section class="panel"><h2>验证是否真的在浏览器本地处理</h2><p>打开开发者工具后，清空 Network 面板、关闭缓存、选择样例、执行编辑并下载结果。应用资源和统计请求必须与文件传输分开判断。只有图片字节和渲染结果都留在浏览器运行环境中，本地处理结论才成立；重载后还会重复一次，避免缓存掩盖上传。</p></section>
-    <figure class="evidence"><img src="/assets/exif-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy EXIF 清理工具上传界面"><figcaption>2026 年 10 月 20 日原创测试截图。EXIF 流程把元数据检查与画面检查分开，因为移除元数据无法遮住像素里的脸、地址、证件或屏幕。</figcaption></figure>
-    <h2>当前复核矩阵</h2>
-    <table class="test-table"><thead><tr><th>工具</th><th>检查内容</th><th>独立复核</th><th>重要限制</th></tr></thead><tbody>
+    <div class="eyebrow">验证清单</div>
+    <h1>检查实际下载的图片，而不只是预览。</h1>
+    <p class="lead">成功下载图片不代表它适合公开。请分别检查隐藏元数据、可见信息、输出质量和网络行为。</p>
+    <p class="guide-meta">ImagePrivacy 维护 · 清单更新于 2026 年 10 月 20 日</p>
+    <section class="panel"><h2>建议流程，不是已完成的测试报告</h2><p>本页描述建议检查，不表示所有检查均已通过。这里没有发布完整 HEIC 兼容性矩阵、独立安全审计或全面元数据清理认证。界面截图仅说明控件，不是成功导出或隐私测试的证据。内容复核日期不等于工具测试日期。</p><p>有效记录应包含工具版本或部署、浏览器与操作系统、样例特征、步骤、实际结果和限制。未执行的项目应标记为“未测试”。</p></section>
+    <section class="panel"><h2>准备无害样例</h2><p>建议使用带已知无敏感 EXIF 字段的 JPEG、包含虚构账号的 PNG 截图、透明图片、大尺寸渐变图，以及获准用于测试且记录了来源和特征的 HEIC 样例。这些建议不代表已发布的测试集或已完成的测试。原件与导出文件应分开保留，不要使用客户文件。</p></section>
+    <section class="panel"><h2>检查网络行为</h2><p>加载工具前打开开发者工具，禁用缓存并保留 Network 日志，然后选择无害样例、编辑并下载。将代码、广告和统计请求，与携带文件字节、编码图片内容、文件名或提取元数据的请求区分开。检查载荷与发起者，重载后重复。不要公开含令牌或个人信息的原始日志。</p><p>单次未发现上传只能为该流程提供有限证据，不能证明所有代码路径或未来行为。浏览器内处理不等于离线：广告、统计、托管及代码下载仍可连接外部服务器。请查看<a href="/zh/privacy/">数据处理与广告选择</a>。</p></section>
+    <figure class="evidence"><img src="/assets/exif-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy EXIF 清理工具文件选择界面"><figcaption>仅为界面示意。截图不能证明元数据已移除或网络行为已验证。</figcaption></figure>
+    <h2>建议检查项目，而非通过结果</h2>
+    <div class="table-scroll" role="region" aria-label="工具建议检查，可横向滚动查看全部列" tabindex="0"><table class="test-table"><thead><tr><th>工具</th><th>检查内容</th><th>导出复核</th><th>重要限制</th></tr></thead><tbody>
       <tr><td>EXIF 清理</td><td>读取元数据、标记 GPS、导出副本</td><td>再次检查导出文件</td><td>不会移除画面中的私密信息</td></tr>
       <tr><td>图片水印</td><td>文字位置、透明度、大小、导出</td><td>以 100% 缩放查看最终像素</td><td>水印不是访问控制</td></tr>
       <tr><td>图片打码</td><td>实色、模糊和像素化区域</td><td>检查扁平化导出图，而非编辑预览</td><td>模糊可能保留形状和上下文</td></tr>
       <tr><td>图片缩放</td><td>尺寸、比例锁定、方向、格式</td><td>读取导出像素尺寸</td><td>缩小不会隐藏仍然可见的内容</td></tr>
       <tr><td>图片压缩</td><td>批量队列、质量、体积、ZIP</td><td>打开代表性结果并比较大小</td><td>不同编码器的质量值不可直接等同</td></tr>
       <tr><td>格式转换</td><td>HEIC 解码与 JPG/PNG/WebP 导出</td><td>在真实目标平台打开结果</td><td>序列、景深和色彩配置可能丢失</td></tr>
-    </tbody></table>
-    <section class="panel"><h2>元数据必须在导出后再次检查</h2><p>Canvas 导出通常会生成元数据较少的副本，但不能只凭经验判断。我们用 EXIF 检查器重新打开下载文件，比较 GPS、相机、软件、方向和日期字段。干净结果只适用于这一份导出副本，不自动适用于原图或其他应用生成的文件。</p></section>
+    </tbody></table></div>
+    <section class="panel"><h2>最后一次编辑后再验证元数据</h2><p>检查实际下载的文件，而非预览。在支持范围内比较 EXIF、GPS、XMP、IPTC、注释和嵌入预览。重要分享应使用独立本地元数据读取器复核。读取器只能报告它能识别的字段，未检测到字段不等于没有元数据。后续编辑或转换后应重新检查，具体见<a href="/zh/guides/verify-image-metadata-removal/">元数据验证指南</a>。</p></section>
     <section class="panel"><h2>画面隐私需要单独人工复核</h2><p>自动元数据检查无法识别所有人脸、快递单、反光、浏览器标签、二维码、证件号或背景屏幕。打码后要按正常尺寸和 100% 缩放查看扁平化导出图。高风险信息优先使用不透明实色块，因为模糊和像素化仍可能暴露轮廓和上下文。</p></section>
-    <figure class="evidence"><img src="/assets/convert-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy 图片格式转换界面"><figcaption>格式转换复核会检查上传区、格式选择、导出文件能否重新打开，并明确浏览器转换可能丢弃哪些信息。</figcaption></figure>
-    <section class="panel"><h2>质量与兼容性</h2><p>下载后比较尺寸、文件大小、透明度、方向、文字边缘、渐变和颜色表现。JPEG 与 WebP 的质量滑块只是编码器控制值，不是通用分数。HEIC 支持取决于浏览器解码器，因此批量处理前要先用代表性文件在真实目标平台测试。</p></section>
-    <section class="panel"><h2>失败路径、无障碍和移动端</h2><p>每个工具都检查不支持格式、空选择、重复执行、下载控件、键盘导航、语言切换和 390 CSS 像素宽视口。错误应告诉用户下一步，广告不能伪装成下载或结果按钮，上传区、预览和控件也不能产生横向溢出。</p></section>
+    <figure class="evidence"><img src="/assets/convert-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy 图片格式转换界面"><figcaption>界面示意，不是 HEIC 解码测试结果。兼容性应通过在实际目标平台打开导出文件来检查。</figcaption></figure>
+    <section class="panel"><h2>质量与兼容性</h2><p>下载后比较尺寸、文件大小、透明度、方向、文字边缘、渐变和颜色表现。JPEG 与 WebP 质量值只是编码器控制值，不是通用分数。HEIC 支持取决于浏览器和解码库。单个成功样例不能证明所有变体均受支持，批量处理前应在目标平台测试代表性文件。</p></section>
+    <section class="panel"><h2>功能检查的结论范围更窄</h2><p>检查不支持的输入、空选择、重复操作、下载、键盘导航、语言切换和移动端布局。通过这些检查有助于确认可用性，但不等于全面元数据移除、完整 HEIC 解码验证或安全认证。广告不应伪装成下载或结果按钮。</p></section>
     <section class="panel"><h2>更正与复现</h2><p>重要修改会写入<a href="/zh/changelog/">公开更新记录</a>。报告问题时，请提供工具网址、浏览器版本、输入格式与尺寸、预期结果和实际结果。不要通过邮件发送私密原图；请制作无害样例，或发送问题描述到 <a href="mailto:contact@imageprivacy.org">contact@imageprivacy.org</a>。</p></section>
+    <section class="panel"><h2>技术参考</h2><p><a href="https://developer.chrome.com/docs/devtools/network/">Chrome DevTools 网络文档</a>说明请求检查方法。<a href="https://exiftool.org/TagNames/">ExifTool 标签参考</a>介绍元数据分组；这些资料不代表对 ImagePrivacy 的背书或认证。</p></section>
     <footer><a href="/zh/editorial-policy/">编辑政策</a><a href="/zh/privacy/">隐私</a><a href="/zh/terms/">条款</a></footer>
   </main>
 </body>

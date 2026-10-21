@@ -7,6 +7,13 @@
     "apps/*"
   ],
   "scripts": {
-    "check": "node scripts/check-static.js"
+    "check": "node scripts/check-static.js",
+    "audit:local": "node scripts/audit-sites.cjs",
+    "audit:online": "node scripts/audit-sites.cjs --online",
+    "test:tools": "node scripts/smoke-tools.cjs",
+    "test:codecs": "node scripts/smoke-tools.cjs --codecs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

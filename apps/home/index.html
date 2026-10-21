@@ -96,7 +96,7 @@
         "name": "Do the image tools upload my files?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The tools are designed for browser-side processing. Your image should remain on your device while you create a new cleaned or resized copy."
+          "text": "The tools are designed to process selected image files in your browser. Loading the website, ads, and analytics still makes external requests. Local file processing is not a claim that the website is offline or independently security-certified."
         }
       },
       {
@@ -109,10 +109,10 @@
       },
       {
         "@type": "Question",
-        "name": "Which tool should I use first?",
+        "name": "Should I share the original image?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Start by checking visible content, then remove metadata, redact sensitive areas if needed, add a watermark when attribution matters, and export a resized or compressed public copy."
+          "text": "Usually no. Share a reviewed copy with only the dimensions, format, metadata, and visible details needed by its recipient."
         }
       }
     ]
@@ -124,22 +124,24 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <style>[hidden]{display:none!important}</style>
+  <script defer src="/privacy-controls.js"></script>
 </head>
 <body>
-  <header class="top"><nav class="nav" aria-label="Main navigation"><div class="brand"><span class="mark"><img src="logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/guides/">Guides</a><span>·</span><a href="/testing/">How we test</a><span>·</span><a href="/about/">About</a><span>·</span><a href="/contact/">Contact</a><span>·</span><a href="/zh/">中文</a></div></nav></header>
+  <header class="top"><nav class="nav" aria-label="Main navigation"><div class="brand"><span class="mark"><img src="logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/guides/">Guides</a><span>·</span><a href="/testing/">Verification checklist</a><span>·</span><a href="/about/">About</a><span>·</span><a href="/contact/">Contact</a><span>·</span><a href="/zh/">中文</a></div></nav></header>
   <main>
-    <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">Private browser image tools for removing metadata, adding watermarks, and preparing safer shared copies. No upload. No account.</p><div class="hero-points" aria-label="ImagePrivacy highlights"><span>Privacy-first</span><span>Runs in your browser</span><span>No account</span><span>Publishing checklist</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
-    <p class="trust-strip">Most image workflows should keep originals private. Use a cleaned copy for sharing, and check both hidden metadata and visible content before publishing.</p>
+    <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">Remove photo metadata, cover private details, and prepare an image copy to share. Image processing is designed to run in your browser. No account needed.</p><div class="hero-points" aria-label="ImagePrivacy highlights"><span>Privacy-first</span><span>Runs in your browser</span><span>No account</span><span>Publishing checklist</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
+    <p class="trust-strip">Browser-side image processing does not mean this website is offline. Page resources, ads, and analytics make network requests. <a href="/privacy/">Read what is processed and your privacy choices</a>.</p>
     <section class="grid" aria-label="Image privacy tools">
       <a class="card" href="https://exif.imageprivacy.org/"><div class="card-top"><strong>EXIF Remover</strong><span class="icon green">EX</span></div><span>Inspect and remove hidden photo metadata before sharing a public copy.</span></a>
       <a class="card" href="https://watermark.imageprivacy.org/"><div class="card-top"><strong>Watermark Tool</strong><span class="icon blue">WM</span></div><span>Add readable text watermarks for previews, proofs, listings, and public images.</span></a>
       <a class="card" href="https://redact.imageprivacy.org/"><div class="card-top"><strong>Image Redactor</strong><span class="icon green">RD</span></div><span>Hide faces, addresses, screens, documents, and other visible private details.</span></a>
       <a class="card" href="https://resize.imageprivacy.org/"><div class="card-top"><strong>Image Resizer</strong><span class="icon blue">RS</span></div><span>Create smaller public copies while keeping original images private.</span></a>
-      <a class="card" href="https://compress.imageprivacy.org/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>Batch compress HEIC, PNG, JPEG, WebP, or AVIF with comparison and ZIP download.</span></a>
-      <a class="card" href="https://convert.imageprivacy.org/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>Convert HEIC, PNG, JPEG, and WebP in the browser and export a clean copy.</span></a>
+      <a class="card" href="https://compress.imageprivacy.org/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>Reduce image file sizes and compare the exported results. Format support depends on the input and decoder.</span></a>
+      <a class="card" href="https://convert.imageprivacy.org/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>Convert supported images to JPEG, PNG, or WebP. Check the exported file; conversion alone is not a privacy check.</span></a>
     </section>
     <section class="group" aria-labelledby="latest-guides">
-      <div class="section-head"><h2 id="latest-guides">Latest guides</h2><a class="view-all" href="/guides/">View all guides</a></div>
+      <div class="section-head"><h2 id="latest-guides">Sharing guides</h2><a class="view-all" href="/guides/">View all guides</a></div>
       <div class="grid">
         <a class="card" href="/guides/photo-privacy-threat-model/"><div class="card-top"><strong>Photo Privacy Threat Model</strong><span class="icon blue">G</span></div><span>Choose cleanup steps based on the image, audience, destination, and disclosure risk.</span></a>
         <a class="card" href="/guides/verify-image-metadata-removal/"><div class="card-top"><strong>Verify Metadata Removal</strong><span class="icon blue">G</span></div><span>Inspect the final downloaded file instead of trusting only a clean preview.</span></a>
@@ -163,7 +165,7 @@
       <div class="content-grid">
         <div class="content-panel"><h3>1. Review the picture</h3><p>Zoom in and check the visible scene. Metadata cleanup will not hide screen text, addresses, faces, badges, invoices, or personal documents.</p></div>
         <div class="content-panel"><h3>2. Create a public copy</h3><p>Export a new image after redaction, watermarking, resizing, or conversion. Keep the source file separate and do not overwrite your private original.</p></div>
-        <div class="content-panel"><h3>3. Recheck the result</h3><p>Open the exported file once more before uploading it. Confirm the visible content, dimensions, format, and file name are appropriate for the destination.</p></div>
+        <div class="content-panel"><h3>3. Recheck the result</h3><p>Open the exported file once more before uploading it. Check metadata again after the final edit, and confirm the visible content, dimensions, format, and file name suit the destination.</p></div>
       </div>
     </section>
 
@@ -171,13 +173,13 @@
       <h2 id="imageprivacy-faq">ImagePrivacy FAQ</h2>
       <div class="faq-list">
         <details><summary>What does ImagePrivacy help with?</summary><p>It helps you prepare safer public copies of images by reducing hidden metadata, redacting visible details, adding watermarks, resizing, compressing, and converting formats.</p></details>
-        <details><summary>Do the tools upload my files?</summary><p>The tools are designed for browser-side processing. Your image should remain on your device while you create a new cleaned copy.</p></details>
+        <details><summary>Do the tools upload my files?</summary><p>The tools are designed to process selected image files in your browser. Loading the website, ads, and analytics still makes external requests. Local processing is not an independent security certification. See the <a href="/privacy/">privacy policy</a>.</p></details>
         <details><summary>Does removing EXIF hide everything private?</summary><p>No. EXIF removal reduces hidden metadata, but visible information inside the image still needs manual review and redaction when necessary.</p></details>
         <details><summary>Should I share the original image?</summary><p>Usually no. Share a cleaned copy that has only the size, format, metadata, and visible details needed for the public context.</p></details>
       </div>
     </section>
 
-    <footer><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span></footer>
+    <footer><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span><span><a href="/editorial-policy/">Editorial policy</a> · <a href="/privacy/#choices">Ad and privacy choices</a></span><a href="/privacy/#choices" data-privacy-settings hidden>Privacy and cookie settings</a></footer>
   </main>
   <script>
     const canvas=document.getElementById("image-scene"),ctx=canvas.getContext("2d");function draw(){const r=canvas.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,r.width,r.height);ctx.fillStyle="#fff";ctx.fillRect(0,0,r.width,r.height);const t=Date.now()/1500;for(let i=0;i<9;i++){const x=18+(i%3)*(r.width-50)/2,y=18+Math.floor(i/3)*(r.height-50)/2,w=42,h=34;ctx.fillStyle=["#eef7f1","#eef4ff","#fff7ed"][i%3];ctx.strokeStyle=["#0f8a6a","#2563eb","#b45309"][i%3];ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect(x,y,w,h,6);ctx.fill();ctx.stroke();ctx.fillStyle=ctx.strokeStyle;ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(x+12+Math.sin(t+i)*2,y+12,4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.beginPath();ctx.moveTo(x+8,y+h-8);ctx.lineTo(x+19,y+20+Math.cos(t+i)*2);ctx.lineTo(x+28,y+h-8);ctx.lineTo(x+34,y+24);ctx.lineTo(x+w-7,y+h-8);ctx.stroke()}ctx.strokeStyle="#d6ded8";ctx.lineWidth=1;for(let x=12;x<r.width;x+=24){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,r.height);ctx.stroke()}for(let y=12;y<r.height;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(r.width,y);ctx.stroke()}requestAnimationFrame(draw)}draw();

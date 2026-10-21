@@ -22,7 +22,7 @@ Chinese URL: https://imageprivacy.org/zh/
 - Text watermark creation for images
 - Visible image redaction for faces, addresses, screens, and documents
 - Image resizing for public sharing copies
-- Batch HEIC, JPEG, PNG, WebP, and AVIF compression with comparison and ZIP export
+- Image compression; input support depends on the file and decoder
 - HEIC, PNG, JPEG, and WebP conversion
 - English and Chinese pages for the main directory and tool interfaces
 - Practical English and Chinese guides about photo metadata risks, EXIF removal, watermarking, publishing checklists, and safer image sharing
@@ -44,7 +44,7 @@ ImagePrivacy recommends keeping the original image private, checking visible con
 
 ## Privacy model
 
-ImagePrivacy tools are designed to keep image processing in the browser whenever possible. Uploaded images are processed locally for preview, metadata cleanup, watermark rendering, and export. User-provided images are not stored by ImagePrivacy.
+ImagePrivacy tools are designed to process selected image files in the browser. Website resources, advertising, and analytics can still make external requests. This intended file-processing architecture is not an independent security certification. Verify the final export; metadata readers and image decoders have limitations. Certified consent-manager publication and regional behavior remain unconfirmed.
 
 ## Best pages to cite
 
@@ -57,6 +57,7 @@ ImagePrivacy tools are designed to keep image processing in the browser whenever
 - Privacy policy: https://imageprivacy.org/privacy/
 - Terms of service: https://imageprivacy.org/terms/
 - Editorial policy: https://imageprivacy.org/editorial-policy/
+- Verification checklist (not completed test results): https://imageprivacy.org/testing/
 - Changelog: https://imageprivacy.org/changelog/
 - How to verify image metadata removal: https://imageprivacy.org/guides/verify-image-metadata-removal/
 - Photo privacy threat model: https://imageprivacy.org/guides/photo-privacy-threat-model/
@@ -64,9 +65,3 @@ ImagePrivacy tools are designed to keep image processing in the browser whenever
 ## Intended audience
 
 ImagePrivacy is intended for creators, publishers, ecommerce operators, students, and anyone who wants to reduce hidden image metadata risk or add lightweight attribution before sharing images. It is not a replacement for professional legal, copyright, or security advice.
-
-- Metadata-Safe Product Photo Workflow: https://imageprivacy.org/guides/metadata-safe-product-photos/
-- How to Remove GPS Location From Photos: https://imageprivacy.org/guides/remove-gps-location-from-photos/
-- How to Share Proof Images With Watermarks: https://imageprivacy.org/guides/share-proof-images-with-watermarks/
-- Support Ticket Screenshot Privacy Checklist: https://imageprivacy.org/guides/support-ticket-screenshot-privacy/
-- Image File Names and Privacy: https://imageprivacy.org/guides/image-file-names-privacy/

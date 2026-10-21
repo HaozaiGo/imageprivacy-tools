@@ -111,10 +111,13 @@
 
   function setBusy(value) {
     state.busy = value;
-    elements.compressAll.disabled = value || !state.items.some(item => item.status !== "loading");
+    elements.compressAll.disabled = value || !state.items.some(item => item.width > 0);
     elements.clearAll.disabled = value;
     elements.file.disabled = value;
     elements.downloadZip.disabled = value;
+    for (const input of [elements.format, elements.quality, elements.maxWidth, elements.target, elements.background]) {
+      input.disabled = value;
+    }
   }
 
   async function prepareSource(file) {
@@ -155,8 +158,8 @@
     const incoming = Array.from(fileList);
     if (incoming.length > available) setNotice(copy.tooMany);
 
-    for (const file of incoming.slice(0, available)) {
-      const item = {
+    // Reserve every queue slot before the first asynchronous decode.
+    const pending = incoming.slice(0, available).map(file => ({
         id: state.nextId++,
         file,
         sourceBlob: null,
@@ -172,9 +175,12 @@
         statusText: isHeic(file) ? copy.decodingHeic : copy.loading,
         error: "",
         targetUsed: false
-      };
-      state.items.push(item);
-      render();
+      }));
+    state.items.push(...pending);
+    render();
+    for (const item of pending) {
+      if (!state.items.includes(item)) continue;
+      const file = item.file;
 
       if (!ACCEPTED.test(file.name) && !/^image\/(jpeg|png|webp|avif|heic|heif)$/i.test(file.type)) {
         item.status = "error";
@@ -190,8 +196,10 @@
       }
 
       try {
-        item.sourceBlob = await prepareSource(file);
-        const dimensions = await getDimensions(item.sourceBlob);
+        const sourceBlob = await prepareSource(file);
+        const dimensions = await getDimensions(sourceBlob);
+        if (!state.items.includes(item)) continue;
+        item.sourceBlob = sourceBlob;
         item.width = dimensions.width;
         item.height = dimensions.height;
         item.sourceUrl = URL.createObjectURL(item.sourceBlob);
@@ -199,7 +207,7 @@
         item.statusText = copy.ready;
       } catch (error) {
         item.status = "error";
-        item.error = error.message || copy.decodeFailed;
+        item.error = isHeic(file) ? (error.message || copy.decodeFailed) : copy.decodeFailed;
       }
       render();
     }
@@ -247,7 +255,7 @@
 
   function canvasToBlob(canvas, type, quality) {
     return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error(copy.failed)), type, quality / 100);
+      canvas.toBlob(blob => blob && blob.type === type ? resolve(blob) : reject(new Error(copy.failed)), type, quality / 100);
     });
   }
 
@@ -359,7 +367,7 @@
 
   async function compressAll() {
     if (state.busy) return;
-    const processable = state.items.filter(item => item.sourceBlob);
+    const processable = state.items.filter(item => item.width > 0 && item.sourceBlob);
     if (!processable.length) {
       setNotice(copy.noOutput);
       return;
@@ -502,7 +510,7 @@
     elements.workspace.hidden = state.items.length === 0;
     elements.queue.replaceChildren(...state.items.map(createItemElement));
     renderSummary();
-    elements.compressAll.disabled = state.busy || !state.items.some(item => item.sourceBlob);
+    elements.compressAll.disabled = state.busy || !state.items.some(item => item.width > 0 && item.sourceBlob);
     elements.backgroundField.hidden = elements.format.value !== "image/jpeg";
   }
 

@@ -4,6 +4,8 @@ const isZh = document.documentElement.lang.toLowerCase().startsWith('zh');
 const copy = {
   chooseImage: isZh ? '请选择图片文件' : 'Please choose an image file',
   chooseFirst: isZh ? '请先选择图片' : 'Choose an image first',
+  decodeFailed: isZh ? '这个文件无法在浏览器中解码。' : 'This file could not be decoded in the browser.',
+  metadataUnreadable: isZh ? '无法完整读取 EXIF 元数据，仍可导出清理后的副本。' : 'EXIF metadata could not be fully read. You can still export a cleaned copy.',
   unknown: isZh ? '未知' : 'Unknown',
   fileName: isZh ? '文件名' : 'File name',
   fileSize: isZh ? '文件大小' : 'File size',
@@ -27,6 +29,7 @@ const copy = {
   yes: isZh ? '是' : 'Yes',
   no: isZh ? '否' : 'No',
   notInspected: isZh ? '当前格式未检查' : 'Not inspected for this format',
+  inspectionFailed: isZh ? '元数据无法完整检查' : 'Metadata could not be fully inspected',
   outputCheck: isZh ? '导出后 EXIF 检查' : 'Post-export EXIF check',
   noReadableExif: isZh ? '未发现可读取字段' : 'No readable fields found',
   fieldsRemain: isZh ? '仍有字段，需要复查' : 'Fields remain; review needed',
@@ -59,12 +62,17 @@ let currentFile = null;
 let currentBuffer = null;
 let currentExif = null;
 let currentReportText = '';
+let currentImage = null;
+let loadRevision = 0;
+let previewUrl = '';
+let exporting = false;
+let metadataUnreadable = false;
 
 function initUpload() {
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
-  dropZone.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', (event) => handleFile(event.target.files[0]));
+  dropZone.addEventListener('click', event => { if (event.target !== fileInput) fileInput.click(); });
+  fileInput.addEventListener('change', () => { handleFile(fileInput.files[0]); fileInput.value = ''; });
   dropZone.addEventListener('dragover', (event) => {
     event.preventDefault();
     dropZone.classList.add('dragover');
@@ -77,40 +85,67 @@ function initUpload() {
   });
 }
 
-function handleFile(file) {
+async function handleFile(file) {
   if (!file) return;
-  if (!file.type.startsWith('image/')) {
+  const request = ++loadRevision;
+  currentFile = null;
+  currentImage = null;
+  currentBuffer = null;
+  currentExif = null;
+  metadataUnreadable = false;
+  currentReportText = '';
+  const button = document.querySelector('[onclick="stripExif()"]');
+  button.disabled = true;
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('privacy-report').hidden = true;
+  document.getElementById('strip-result').textContent = '';
+  const preview = document.getElementById('preview-img');
+  preview.removeAttribute('src');
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = '';
+  if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif)$/i.test(file.name)) {
     showToast(copy.chooseImage);
     return;
   }
-  currentFile = file;
-  currentReportText = '';
-  document.getElementById('privacy-report').hidden = true;
-  document.getElementById('strip-result').textContent = '';
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const img = document.getElementById('preview-img');
-    img.src = event.target.result;
-    img.onload = () => readFileData(file);
-  };
-  reader.readAsDataURL(file);
-  document.getElementById('result-area').style.display = 'flex';
-}
-
-function readFileData(file) {
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    currentBuffer = event.target.result;
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    const buffer = await file.arrayBuffer();
+    if (request !== loadRevision) return;
+    preview.src = url;
+    await preview.decode();
+    if (request !== loadRevision) return;
+    currentFile = file;
+    currentImage = image;
+    currentBuffer = buffer;
+    previewUrl = url;
     updateBasicInfo(file);
-    if (file.type === 'image/jpeg') {
-      currentExif = parseEXIF(currentBuffer);
-      renderExif(currentExif);
+    if (file.type === 'image/jpeg' || /\.jpe?g$/i.test(file.name)) {
+      try {
+        currentExif = parseEXIF(currentBuffer);
+        renderExif(currentExif);
+      } catch (_) {
+        metadataUnreadable = true;
+        document.getElementById('exif-data').textContent = copy.metadataUnreadable;
+      }
     } else {
       currentExif = null;
       renderExif(null, file.type);
     }
-  };
-  reader.readAsArrayBuffer(file);
+    button.disabled = false;
+    document.getElementById('result-area').style.display = 'flex';
+  } catch (_) {
+    if (request === loadRevision) {
+      currentFile = null;
+      currentImage = null;
+      preview.removeAttribute('src');
+      showToast(copy.decodeFailed);
+    }
+  } finally {
+    if (url !== previewUrl) URL.revokeObjectURL(url);
+  }
 }
 
 function updateBasicInfo(file) {
@@ -179,37 +214,48 @@ function initSectionTabs() {
 }
 
 async function stripExif() {
-  const img = document.getElementById('preview-img');
-  if (!img.src || !currentFile) {
+  const img = currentImage;
+  if (!img || !currentFile) {
     showToast(copy.chooseFirst);
     return;
   }
-  const canvas = document.createElement('canvas');
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
-  canvas.getContext('2d').drawImage(img, 0, 0);
-  const blob = await canvasToBlob(canvas, outputMimeType(currentFile), 0.92);
-  if (!blob) {
-    showToast(copy.exportFailed);
-    return;
-  }
-  const outputBuffer = await blob.arrayBuffer();
-  const outputExif = blob.type === 'image/jpeg' ? parseEXIF(outputBuffer) : null;
-  const baseName = currentFile.name.replace(/\.[^.]+$/, '');
-  const objectUrl = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.download = `${baseName}_clean.${mimeExtension(blob.type)}`;
-  link.href = objectUrl;
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+  if (exporting) return;
+  const request = loadRevision;
+  exporting = true;
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext('2d').drawImage(img, 0, 0);
+    const blob = await canvasToBlob(canvas, outputMimeType(currentFile), 0.92);
+    if (request !== loadRevision) return;
+    if (!blob) {
+      showToast(copy.exportFailed);
+      return;
+    }
+    const outputBuffer = await blob.arrayBuffer();
+    if (request !== loadRevision) return;
+    const outputExif = blob.type === 'image/jpeg' ? parseEXIF(outputBuffer) : null;
+    const baseName = currentFile.name.replace(/\.[^.]+$/, '');
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `${baseName}_clean.${mimeExtension(blob.type)}`;
+    link.href = objectUrl;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 
-  const delta = blob.size - currentFile.size;
-  const percent = currentFile.size ? Math.abs(delta / currentFile.size * 100).toFixed(1) : '0.0';
-  const changeText = delta <= 0 ? `${percent}% ${copy.saved}` : `${percent}% ${copy.larger}`;
-  document.getElementById('strip-result').innerHTML = `
-    <strong>${copy.cleaned}</strong><br>
-    <span style="font-size:.75rem;color:var(--text-dim)">${copy.original} ${formatBytes(currentFile.size)} -> ${formatBytes(blob.size)} (${changeText})</span>`;
-  renderPrivacyReport(blob, outputExif);
+    const delta = blob.size - currentFile.size;
+    const percent = currentFile.size ? Math.abs(delta / currentFile.size * 100).toFixed(1) : '0.0';
+    const changeText = delta <= 0 ? `${percent}% ${copy.saved}` : `${percent}% ${copy.larger}`;
+    document.getElementById('strip-result').innerHTML = `
+      <strong>${copy.cleaned}</strong><br>
+      <span style="font-size:.75rem;color:var(--text-dim)">${copy.original} ${formatBytes(currentFile.size)} -> ${formatBytes(blob.size)} (${changeText})</span>`;
+    renderPrivacyReport(blob, outputExif);
+  } catch (_) {
+    if (request === loadRevision) showToast(copy.exportFailed);
+  } finally {
+    exporting = false;
+  }
 }
 
 function outputMimeType(file) {
@@ -231,9 +277,10 @@ function mimeExtension(mimeType) {
 }
 
 function renderPrivacyReport(blob, outputExif) {
-  const sourceInspectable = currentFile.type === 'image/jpeg';
-  const sourceCount = sourceInspectable ? Object.keys(currentExif || {}).length : copy.notInspected;
-  const gpsValue = sourceInspectable ? (hasGps(currentExif) ? copy.yes : copy.no) : copy.notInspected;
+  const sourceInspectable = !metadataUnreadable && (currentFile.type === 'image/jpeg' || /\.jpe?g$/i.test(currentFile.name));
+  const uninspected = metadataUnreadable ? copy.inspectionFailed : copy.notInspected;
+  const sourceCount = sourceInspectable ? Object.keys(currentExif || {}).length : uninspected;
+  const gpsValue = sourceInspectable ? (hasGps(currentExif) ? copy.yes : copy.no) : uninspected;
   const outputInspectable = blob.type === 'image/jpeg';
   const outputClean = outputInspectable && !outputExif;
   const outputValue = outputInspectable ? (outputClean ? copy.noReadableExif : copy.fieldsRemain) : copy.notInspected;

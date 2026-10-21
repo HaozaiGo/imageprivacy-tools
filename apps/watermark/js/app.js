@@ -10,14 +10,22 @@ let sourceImage = null;
 let imageLoaded = false;
 let zoom = 1;
 let currentPos = 'center';
+let loadRevision = 0;
+const isZh = document.documentElement.lang.toLowerCase().startsWith('zh');
+const copy = {
+  chooseImage: isZh ? '请选择图片文件' : 'Please choose an image file',
+  decodeFailed: isZh ? '这个文件无法在浏览器中解码。' : 'This file could not be decoded in the browser.',
+  exportFailed: isZh ? '浏览器无法导出这张图片' : 'The browser could not export this image',
+  downloaded: isZh ? '已下载' : 'Downloaded'
+};
 
 /* ---- Upload ---- */
 function initUpload() {
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
 
-  dropZone.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+  dropZone.addEventListener('click', event => { if (event.target !== fileInput) fileInput.click(); });
+  fileInput.addEventListener('change', () => { handleFile(fileInput.files[0]); fileInput.value = ''; });
 
   dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
   dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
@@ -28,16 +36,23 @@ function initUpload() {
   });
 }
 
-function handleFile(file) {
-  if (!file || !file.type.startsWith('image/')) {
-    showToast('❌ 请选择图片文件');
+async function handleFile(file) {
+  if (!file) return;
+  const request = ++loadRevision;
+  sourceImage = null;
+  imageLoaded = false;
+  document.getElementById('upload-section').style.display = 'block';
+  document.getElementById('editor-section').style.display = 'none';
+  if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|bmp)$/i.test(file.name)) {
+    showToast(copy.chooseImage);
     return;
   }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
+  const url = URL.createObjectURL(file);
+  try {
     const img = new Image();
-    img.onload = () => {
+    img.src = url;
+    await img.decode();
+    if (request === loadRevision) {
       sourceImage = img;
       imageLoaded = true;
       document.getElementById('upload-section').style.display = 'none';
@@ -45,10 +60,12 @@ function handleFile(file) {
       document.getElementById('img-info').textContent = `${img.naturalWidth} × ${img.naturalHeight} · ${file.name}`;
       fitView();
       renderWatermark();
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+    }
+  } catch (_) {
+    if (request === loadRevision) showToast(copy.decodeFailed);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 /* ---- Position Buttons ---- */
@@ -101,6 +118,8 @@ function renderWatermark() {
 
   canvas.width = iw;
   canvas.height = ih;
+  canvas.style.width = (iw * zoom) + 'px';
+  canvas.style.height = (ih * zoom) + 'px';
 
   // Clear and draw source
   ctx.clearRect(0, 0, iw, ih);
@@ -190,24 +209,31 @@ function renderWatermark() {
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
 
-  // Apply zoom via CSS
-  canvas.style.width = (iw * zoom) + 'px';
-  canvas.style.height = (ih * zoom) + 'px';
 }
 
 /* ---- Download ---- */
-function downloadImage() {
-  const canvas = document.getElementById('preview-canvas');
-  const fmt = document.getElementById('export-format').value;
-  const quality = parseFloat(document.getElementById('export-quality').value);
-  const dataUrl = canvas.toDataURL(fmt, fmt === 'image/jpeg' ? quality : undefined);
+async function downloadImage() {
+  if (!imageLoaded || !sourceImage) return;
+  const request = loadRevision;
+  try {
+    const canvas = document.getElementById('preview-canvas');
+    const fmt = document.getElementById('export-format').value;
+    const quality = parseFloat(document.getElementById('export-quality').value);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, fmt, fmt === 'image/jpeg' ? quality : undefined));
+    if (request !== loadRevision) return;
+    if (!blob || blob.type !== fmt) throw new Error('encode');
+    const url = URL.createObjectURL(blob);
 
-  const ext = fmt === 'image/png' ? 'png' : 'jpg';
-  const link = document.createElement('a');
-  link.download = `watermarked.${ext}`;
-  link.href = dataUrl;
-  link.click();
-  showToast('✅ 已下载');
+    const ext = fmt === 'image/png' ? 'png' : 'jpg';
+    const link = document.createElement('a');
+    link.download = `watermarked.${ext}`;
+    link.href = url;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    showToast(copy.downloaded);
+  } catch (_) {
+    if (request === loadRevision) showToast(copy.exportFailed);
+  }
 }
 
 /* ---- Label Updates ---- */

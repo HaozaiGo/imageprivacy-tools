@@ -25,6 +25,7 @@
   {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://imageprivacy.org/#organization","name":"ImagePrivacy","url":"https://imageprivacy.org/"},{"@type":"Article","headline":"图片发布前隐私检查清单","description":"图片发布前隐私检查清单，覆盖可见内容、EXIF 元数据、文件名、尺寸、格式和最终导出副本。","inLanguage":"zh-CN","mainEntityOfPage":"https://imageprivacy.org/zh/guides/image-privacy-checklist-before-publishing/","datePublished":"2026-08-16","dateModified":"2026-10-20","author":{"@id":"https://imageprivacy.org/#organization"},"publisher":{"@id":"https://imageprivacy.org/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ImagePrivacy","item":"https://imageprivacy.org/zh/"},{"@type":"ListItem","position":2,"name":"指南","item":"https://imageprivacy.org/zh/guides/"},{"@type":"ListItem","position":3,"name":"图片发布前隐私检查清单","item":"https://imageprivacy.org/zh/guides/image-privacy-checklist-before-publishing/"}]}]}
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046" crossorigin="anonymous"></script>
+  <script defer src="/privacy-controls.js"></script>
 </head>
 <body>
   <header class="top"><nav class="nav" aria-label="主导航"><a class="brand" href="/zh/">ImagePrivacy</a><div class="nav-links"><a href="/zh/guides/">指南</a><a href="/zh/about/">关于</a><a href="/zh/contact/">联系</a><a href="/guides/image-privacy-checklist-before-publishing/">English</a></div></nav></header>
@@ -38,15 +39,16 @@
     <section class="panel"><h2>3. 创建公开副本，而不是覆盖原图</h2><p>如果以后还可能用到原图，请把它保存在私密位置。完成遮挡、调整尺寸、压缩或格式转换后，导出一个单独的公开版本，避免误把原图发出去。</p></section>
     <section class="panel"><h2>4. 检查文件名和发布位置</h2><p>文件名也可能暴露项目名、客户名、日期、地点或内部标签。上传到商品页、作品集、工单或社交平台前，把导出图片改成中性的公开文件名。</p></section>
     <section class="panel"><h2>5. 重新打开导出图片</h2><p>发布前用普通图片查看器打开最终文件。确认遮挡完整、水印清晰、透明背景或背景色正确，并且目标平台能接受这个格式和大小。</p></section>
-    <figure class="evidence"><img src="/assets/exif-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy EXIF 检查和清理工具"><figcaption>2026 年 10 月 20 日原创测试截图。元数据只是一个检查点，画面、文件名、目标平台和最终导出副本仍需分别复核。</figcaption></figure>
+    <figure class="evidence"><img src="/assets/exif-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy EXIF 检查和清理工具"><figcaption>ImagePrivacy 工具界面示意，不是成功导出、元数据移除或兼容性测试的证据。请按本指南检查实际下载的文件。</figcaption></figure>
     <section class="panel"><h2>6. 只保留目标平台需要的尺寸</h2><p>客服工单、商品预览和社交帖子通常不需要相机原始分辨率。先确认目标平台实际展示的最大尺寸，再导出一份对应大小的副本。缩小尺寸可以减少多余细节和传输成本，但不能替代打码；仍可读的文字、人脸和标识必须人工处理。</p></section>
     <section class="panel"><h2>7. 按目标平台选择格式</h2><ul class="checklist"><li><strong>JPEG：</strong>适合照片、表单和广泛兼容场景，但不支持透明背景。</li><li><strong>PNG：</strong>适合界面文字、图表和透明背景，照片体积通常较大。</li><li><strong>WebP：</strong>适合明确支持该格式的现代网站。</li><li><strong>HEIC：</strong>私下保留手机原图；目标平台不支持时再转换公开副本。</li></ul><p>批量处理前，先把一份代表性文件上传到真实表单、CMS、工单或商品平台测试。</p></section>
     <section class="panel"><h2>8. 把私密原图与公开副本分开</h2><p>使用明确文件夹或命名规则区分公开副本。副本只保留接收者完成任务所需的信息。需要编辑、来源证明、售后或内部记录时，不要覆盖原图；已经生成公开副本后，也不要因为两者放在一起而误传原图。</p></section>
     <section class="panel"><h2>完整案例：客服工单截图</h2><ol class="checklist"><li>裁剪到出错界面和准确错误信息。</li><li>遮住账号名、签名链接、客户记录、浏览器标签和通知预览。</li><li>导出扁平 PNG，并使用 <code>upload-error-example.png</code> 之类的中性文件名。</li><li>在编辑器之外打开下载文件，以 100% 缩放复核。</li><li>再次检查导出文件的元数据。</li><li>只附上公开副本；必须提供的标识应放进服务商指定的安全字段。</li></ol></section>
+    <section class="panel" id="watermarks"><h2>为预览和公开图片添加水印</h2><p>先决定水印用途：署名、草稿状态或客户预览。使用简短且适合公开的名称或“预览”字样，不要把私人邮箱、客户全名或内部项目编号写进水印。</p><ol class="checklist"><li>先完成裁剪和必要打码，再确定最终交付尺寸。</li><li>将水印放在不遮住必要细节的位置。角落容易裁掉，中心位置也不能防止移除。</li><li>按实际显示尺寸，在亮部和暗部检查对比度、透明度与可读性，没有适用于所有图片的固定数值。</li><li>保留无水印原件，另行导出副本；重新打开下载文件，确认文字已经写入像素。</li><li>再检查元数据、文件名和分享对象。敏感预览应使用带身份验证的交付方式，而不是仅依赖水印。</li></ol><p>可使用<a href="https://watermark.imageprivacy.org/zh/">图片水印工具</a>。水印可以表达归属或状态，但不是所有权证明，也不能阻止复制、裁剪或编辑。</p></section>
     <section class="panel"><h2>最终发布门槛</h2><ul class="checklist"><li>选择的是公开副本，而不是私密原图。</li><li>已经检查人脸、地址、账号、文档、屏幕和反光。</li><li>已经检查 GPS、日期、相机、软件、IPTC 和 XMP 字段。</li><li>文件名不包含客户、账号、地点或工单标识。</li><li>尺寸、格式、方向、透明度和体积适合目标平台。</li><li>导出文件已经独立重新打开检查。</li><li>明确目标受众和保留时间。</li></ul></section>
-    <section class="panel"><h2>资料来源与复核说明</h2><p>元数据术语参考 <a href="https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf" rel="noopener noreferrer">Exif 2.32 规范</a>和 <a href="https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata" rel="noopener noreferrer">IPTC 图片元数据标准</a>。工单案例为虚构场景，验证方法和限制见<a href="/zh/testing/">图片工具测试说明</a>。</p></section>
+    <section class="panel"><h2>资料来源与复核说明</h2><p>元数据术语参考 <a href="https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf" rel="noopener noreferrer">Exif 2.32 规范</a>和 <a href="https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata" rel="noopener noreferrer">IPTC 图片元数据标准</a>。工单案例为虚构场景，验证方法和限制见<a href="/zh/testing/">图片工具验证清单</a>。</p></section>
     <section class="panel"><h2>相关工具</h2><p><a href="https://exif.imageprivacy.org/zh/">EXIF 移除工具</a>、<a href="https://redact.imageprivacy.org/zh/">图片遮挡工具</a> 和 <a href="https://compress.imageprivacy.org/zh/">图片压缩工具</a> 覆盖了这份清单里最常见的步骤。</p></section>
-    <footer><a href="/zh/privacy/">隐私策略</a><a href="/zh/terms/">服务条款</a></footer>
+    <footer><a href="/zh/privacy/">隐私策略</a><a href="/zh/terms/">服务条款</a><a href="/zh/privacy/#choices">广告与隐私选择</a><a class="privacy-control-link" href="/zh/privacy/#choices" data-privacy-settings hidden>隐私和 Cookie 设置</a></footer>
   </main>
 </body>
 </html>

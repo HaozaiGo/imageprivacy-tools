@@ -70,20 +70,21 @@ function parseEXIF(buffer) {
   const result = {};
 
   // Check JPEG SOI marker
-  if (data.getUint8(0) !== 0xFF || data.getUint8(1) !== 0xD8) {
+  if (buffer.byteLength < 2 || data.getUint8(0) !== 0xFF || data.getUint8(1) !== 0xD8) {
     return null; // Not a JPEG
   }
 
   let offset = 2;
-  while (offset < buffer.byteLength) {
+  while (offset + 1 < buffer.byteLength) {
     // Find next marker
     if (data.getUint8(offset) !== 0xFF) break;
     const marker = data.getUint8(offset + 1);
     
     // SOS (Start of Scan) - no more metadata after this
-    if (marker === 0xDA) break;
+    if (marker === 0xDA || marker === 0xD9) break;
 
     const length = data.getUint16(offset + 2);
+    if (length < 2 || offset + 2 + length > buffer.byteLength) throw new Error('Invalid JPEG metadata segment');
     
     // APP1 - EXIF
     if (marker === 0xE1 && length >= 8) {
@@ -97,7 +98,8 @@ function parseEXIF(buffer) {
           data.getUint8(exifOffset + 5) === 0x00) {
         
         exifOffset += 6;
-        parseTIFF(data, exifOffset, result);
+        // TIFF offsets must stay inside this APP1 segment, not the image bytes.
+        parseTIFF(new DataView(buffer, exifOffset, length - 8), 0, result);
       }
     }
 
@@ -113,20 +115,24 @@ function parseTIFF(data, offset, result) {
   const endian = data.getUint16(offset);
   const little = endian === 0x4949; // 'II'
   const big = endian === 0x4D4D;    // 'MM'
-  if (!little && !big) return;
+  if (!little && !big) throw new Error('Invalid TIFF byte order');
 
   const get16 = (off) => little ? data.getUint16(off, true) : data.getUint16(off);
   const get32 = (off) => little ? data.getUint32(off, true) : data.getUint32(off);
 
   // Check TIFF magic number (0x002A)
-  if (get16(offset + 2) !== 0x002A) return;
+  if (get16(offset + 2) !== 0x002A) throw new Error('Invalid TIFF header');
 
   const ifdOffset = get32(offset + 4);
-  parseIFD(data, offset + ifdOffset, result, get16, get32, offset);
+  parseIFD(data, offset + ifdOffset, result, get16, get32, offset, new Set());
 }
 
-function parseIFD(data, ifdStart, result, get16, get32, tiffBase) {
+function parseIFD(data, ifdStart, result, get16, get32, tiffBase, visited) {
+  if (visited.has(ifdStart) || visited.size >= 64) throw new Error('Invalid recursive EXIF directory');
+  visited.add(ifdStart);
   const entryCount = get16(ifdStart);
+  if (ifdStart + 2 + entryCount * 12 + 4 > data.byteLength) throw new Error('Truncated EXIF directory');
+  const subdirectories = [];
   
   for (let i = 0; i < entryCount; i++) {
     const entryOffset = ifdStart + 2 + i * 12;
@@ -140,6 +146,16 @@ function parseIFD(data, ifdStart, result, get16, get32, tiffBase) {
 
     let value;
     const size = typeSize(type) * count;
+    const start = size <= 4 ? valueOffset : tiffBase + get32(valueOffset);
+    if (!count || start < 0 || start + size > data.byteLength) throw new Error('Invalid EXIF value bounds');
+
+    // Follow only pointers from this directory, never pointers inherited in result.
+    if (tag === 0x8769 || tag === 0x8825) {
+      if (type !== 4 || count !== 1) throw new Error('Invalid EXIF directory pointer');
+      const pointer = get32(valueOffset);
+      if (pointer) subdirectories.push(tiffBase + pointer);
+      continue;
+    }
 
     if (size <= 4) {
       value = readValue(data, valueOffset, type, count, get16, get32);
@@ -174,23 +190,7 @@ function parseIFD(data, ifdStart, result, get16, get32, tiffBase) {
     }
   }
 
-  // Check for Exif IFD pointer
-  const exifIFDPtr = result['Exif IFD偏移'];
-  if (exifIFDPtr) {
-    const subIfd = tiffBase + parseInt(exifIFDPtr);
-    parseIFD(data, subIfd, result, get16, get32, tiffBase);
-  }
-
-  // GPS
-  const gpsPtr = result['GPS IFD偏移'];
-  if (gpsPtr) {
-    const gpsIfd = tiffBase + parseInt(gpsPtr);
-    parseIFD(data, gpsIfd, result, get16, get32, tiffBase);
-  }
-
-  // Clean up internal pointers
-  delete result['Exif IFD偏移'];
-  delete result['GPS IFD偏移'];
+  for (const subIfd of subdirectories) parseIFD(data, subIfd, result, get16, get32, tiffBase, visited);
 }
 
 function typeSize(type) {
@@ -215,10 +215,10 @@ function readValue(data, offset, type, count, get16, get32) {
       return den !== 0 ? num / den : 0;
     }
     case 9: // SLONG
-      return data.getInt32(offset, true);
+      return get32(offset) | 0;
     case 10: { // SRATIONAL
-      const num = data.getInt32(offset, true);
-      const den = data.getInt32(offset + 4, true);
+      const num = get32(offset) | 0;
+      const den = get32(offset + 4) | 0;
       return den !== 0 ? num / den : 0;
     }
     default:

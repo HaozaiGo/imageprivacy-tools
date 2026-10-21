@@ -11,25 +11,305 @@
       "destination": "https://imageprivacy.org/$1",
       "statusCode": 301
     },
-    {"source":"/guides/exif-vs-watermark/","destination":"/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/guides/image-file-names-privacy/","destination":"/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/guides/prepare-images-for-publishing/","destination":"/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/guides/safe-image-sharing-workflow/","destination":"/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/guides/metadata-safe-product-photos/","destination":"/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/guides/share-proof-images-with-watermarks/","destination":"/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/guides/watermark-images-online/","destination":"/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/guides/photo-metadata-risks/","destination":"/guides/remove-exif-before-sharing/","permanent":true},
-    {"source":"/guides/remove-gps-location-from-photos/","destination":"/guides/remove-exif-before-sharing/","permanent":true},
-    {"source":"/guides/support-ticket-screenshot-privacy/","destination":"/guides/screenshot-redaction-best-practices/","permanent":true},
-    {"source":"/zh/guides/exif-vs-watermark/","destination":"/zh/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/zh/guides/image-file-names-privacy/","destination":"/zh/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/zh/guides/prepare-images-for-publishing/","destination":"/zh/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/zh/guides/safe-image-sharing-workflow/","destination":"/zh/guides/photo-privacy-threat-model/","permanent":true},
-    {"source":"/zh/guides/metadata-safe-product-photos/","destination":"/zh/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/zh/guides/share-proof-images-with-watermarks/","destination":"/zh/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/zh/guides/watermark-images-online/","destination":"/zh/guides/image-privacy-checklist-before-publishing/","permanent":true},
-    {"source":"/zh/guides/photo-metadata-risks/","destination":"/zh/guides/remove-exif-before-sharing/","permanent":true},
-    {"source":"/zh/guides/remove-gps-location-from-photos/","destination":"/zh/guides/remove-exif-before-sharing/","permanent":true},
-    {"source":"/zh/guides/support-ticket-screenshot-privacy/","destination":"/zh/guides/screenshot-redaction-best-practices/","permanent":true}
+    {
+      "source": "/guides/exif-vs-watermark",
+      "destination": "/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/exif-vs-watermark/",
+      "destination": "/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/exif-vs-watermark/index.html",
+      "destination": "/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/image-file-names-privacy",
+      "destination": "/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/guides/image-file-names-privacy/",
+      "destination": "/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/guides/image-file-names-privacy/index.html",
+      "destination": "/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/guides/prepare-images-for-publishing",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/prepare-images-for-publishing/",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/prepare-images-for-publishing/index.html",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/safe-image-sharing-workflow",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/safe-image-sharing-workflow/",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/safe-image-sharing-workflow/index.html",
+      "destination": "/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/metadata-safe-product-photos",
+      "destination": "/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/guides/metadata-safe-product-photos/",
+      "destination": "/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/guides/metadata-safe-product-photos/index.html",
+      "destination": "/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/guides/share-proof-images-with-watermarks",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/share-proof-images-with-watermarks/",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/share-proof-images-with-watermarks/index.html",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/watermark-images-online",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/watermark-images-online/",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/watermark-images-online/index.html",
+      "destination": "/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/guides/photo-metadata-risks",
+      "destination": "/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/photo-metadata-risks/",
+      "destination": "/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/photo-metadata-risks/index.html",
+      "destination": "/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/remove-gps-location-from-photos",
+      "destination": "/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/guides/remove-gps-location-from-photos/",
+      "destination": "/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/guides/remove-gps-location-from-photos/index.html",
+      "destination": "/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/guides/support-ticket-screenshot-privacy",
+      "destination": "/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    },
+    {
+      "source": "/guides/support-ticket-screenshot-privacy/",
+      "destination": "/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    },
+    {
+      "source": "/guides/support-ticket-screenshot-privacy/index.html",
+      "destination": "/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/exif-vs-watermark",
+      "destination": "/zh/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/exif-vs-watermark/",
+      "destination": "/zh/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/exif-vs-watermark/index.html",
+      "destination": "/zh/guides/photo-privacy-threat-model/#metadata-and-watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/image-file-names-privacy",
+      "destination": "/zh/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/image-file-names-privacy/",
+      "destination": "/zh/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/image-file-names-privacy/index.html",
+      "destination": "/zh/guides/photo-privacy-threat-model/#filenames",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/prepare-images-for-publishing",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/prepare-images-for-publishing/",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/prepare-images-for-publishing/index.html",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/safe-image-sharing-workflow",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/safe-image-sharing-workflow/",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/safe-image-sharing-workflow/index.html",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/metadata-safe-product-photos",
+      "destination": "/zh/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/metadata-safe-product-photos/",
+      "destination": "/zh/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/metadata-safe-product-photos/index.html",
+      "destination": "/zh/guides/photo-privacy-threat-model/#marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/share-proof-images-with-watermarks",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/share-proof-images-with-watermarks/",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/share-proof-images-with-watermarks/index.html",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/watermark-images-online",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/watermark-images-online/",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/watermark-images-online/index.html",
+      "destination": "/zh/guides/image-privacy-checklist-before-publishing/#watermarks",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/photo-metadata-risks",
+      "destination": "/zh/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/photo-metadata-risks/",
+      "destination": "/zh/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/photo-metadata-risks/index.html",
+      "destination": "/zh/guides/remove-exif-before-sharing/",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/remove-gps-location-from-photos",
+      "destination": "/zh/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/remove-gps-location-from-photos/",
+      "destination": "/zh/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/remove-gps-location-from-photos/index.html",
+      "destination": "/zh/guides/remove-exif-before-sharing/#gps",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/support-ticket-screenshot-privacy",
+      "destination": "/zh/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/support-ticket-screenshot-privacy/",
+      "destination": "/zh/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    },
+    {
+      "source": "/zh/guides/support-ticket-screenshot-privacy/index.html",
+      "destination": "/zh/guides/screenshot-redaction-best-practices/#support-screenshots",
+      "permanent": true
+    }
   ]
 }

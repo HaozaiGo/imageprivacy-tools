@@ -94,7 +94,7 @@
         "name": "图片工具会上传我的文件吗？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "这些工具按浏览器端处理设计。你可以在设备上生成清理后或调整后的副本，而不是把原图上传到服务器处理。"
+          "text": "工具设计为在浏览器内处理所选图片。加载网站、广告和统计仍会发出外部请求。本地文件处理不代表网站离线或获得独立安全认证。"
         }
       },
       {
@@ -107,10 +107,10 @@
       },
       {
         "@type": "Question",
-        "name": "应该先使用哪个工具？",
+        "name": "我应该分享原图吗？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "建议先检查可见内容，再移除元数据；如果有敏感区域就先遮挡，需要归属说明再添加水印，最后导出较小或压缩后的公开副本。"
+          "text": "通常不建议。应分享经过复核的副本，只保留接收者需要的尺寸、格式、元数据和可见细节。"
         }
       }
     ]
@@ -122,22 +122,24 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <style>[hidden]{display:none!important}</style>
+  <script defer src="/privacy-controls.js"></script>
 </head>
 <body>
-  <header class="top"><nav class="nav" aria-label="主导航"><div class="brand"><span class="mark"><img src="../logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/zh/guides/">指南</a><span>·</span><a href="/zh/testing/">测试方法</a><span>·</span><a href="/zh/about/">关于</a><span>·</span><a href="/zh/contact/">联系</a><span>·</span><a href="/">English</a></div></nav></header>
+  <header class="top"><nav class="nav" aria-label="主导航"><div class="brand"><span class="mark"><img src="../logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/zh/guides/">指南</a><span>·</span><a href="/zh/testing/">验证清单</a><span>·</span><a href="/zh/about/">关于</a><span>·</span><a href="/zh/contact/">联系</a><span>·</span><a href="/">English</a></div></nav></header>
   <main>
-    <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">在浏览器中处理图片隐私：移除元数据、添加水印，并为公开分享准备更安全的副本。无需上传，无需账号。</p><div class="hero-points" aria-label="ImagePrivacy 亮点"><span>隐私优先</span><span>浏览器内处理</span><span>无需账号</span><span>发布前检查</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
-    <p class="trust-strip">图片发布前应尽量保留原图私密，只分享清理后的副本。除了隐藏元数据，也要检查画面中是否包含地址、人脸、账号或屏幕文字。</p>
+    <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">移除照片元数据、遮挡私密细节，并准备适合分享的图片副本。图片处理设计为在浏览器内完成，无需账号。</p><div class="hero-points" aria-label="ImagePrivacy 亮点"><span>隐私优先</span><span>浏览器内处理</span><span>无需账号</span><span>发布前检查</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
+    <p class="trust-strip">图片在浏览器内处理，不等于网站离线运行。页面资源、广告和统计仍会发出网络请求。<a href="/zh/privacy/">了解数据处理与隐私选择</a>。</p>
     <section class="grid" aria-label="图片隐私工具">
       <a class="card" href="https://exif.imageprivacy.org/zh/"><div class="card-top"><strong>EXIF Remover</strong><span class="icon green">EX</span></div><span>分享公开副本前，检查并移除隐藏的照片元数据。</span></a>
       <a class="card" href="https://watermark.imageprivacy.org/zh/"><div class="card-top"><strong>Watermark Tool</strong><span class="icon blue">WM</span></div><span>为预览图、证明图、商品图和公开图片添加清晰文字水印。</span></a>
       <a class="card" href="https://redact.imageprivacy.org/zh/"><div class="card-top"><strong>Image Redactor</strong><span class="icon green">RD</span></div><span>遮挡人脸、地址、屏幕、文档和其他画面中的敏感区域。</span></a>
       <a class="card" href="https://resize.imageprivacy.org/zh/"><div class="card-top"><strong>Image Resizer</strong><span class="icon blue">RS</span></div><span>生成更适合公开分享的小尺寸副本，同时保留原图私密。</span></a>
-      <a class="card" href="https://compress.imageprivacy.org/zh/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>批量压缩 HEIC、PNG、JPEG、WebP 或 AVIF，支持对比和 ZIP 下载。</span></a>
-      <a class="card" href="https://convert.imageprivacy.org/zh/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>在浏览器中转换 HEIC、PNG、JPEG 和 WebP，并导出新的干净副本。</span></a>
+      <a class="card" href="https://compress.imageprivacy.org/zh/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>减小图片体积并比较导出结果。格式支持取决于输入文件和解码器。</span></a>
+      <a class="card" href="https://convert.imageprivacy.org/zh/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>将受支持的图片转换为 JPEG、PNG 或 WebP。请检查导出文件，格式转换本身不是隐私检查。</span></a>
     </section>
     <section class="group" aria-labelledby="latest-guides">
-      <div class="section-head"><h2 id="latest-guides">最新指南</h2><a class="view-all" href="/zh/guides/">查看更多</a></div>
+      <div class="section-head"><h2 id="latest-guides">分享指南</h2><a class="view-all" href="/zh/guides/">查看更多</a></div>
       <div class="grid">
         <a class="card" href="/zh/guides/photo-privacy-threat-model/"><div class="card-top"><strong>照片隐私威胁模型</strong><span class="icon blue">G</span></div><span>根据图片、受众、发布目标和泄露后果选择清理步骤。</span></a>
         <a class="card" href="/zh/guides/verify-image-metadata-removal/"><div class="card-top"><strong>验证元数据移除结果</strong><span class="icon blue">G</span></div><span>检查最终下载文件，不只相信网页中的干净预览。</span></a>
@@ -160,7 +162,7 @@
       <div class="content-grid">
         <div class="content-panel"><h3>1. 检查画面内容</h3><p>放大查看图片中的可见信息。元数据清理不会隐藏屏幕文字、地址、人脸、工牌、发票或个人文档。</p></div>
         <div class="content-panel"><h3>2. 创建公开副本</h3><p>完成遮挡、水印、尺寸调整或格式转换后导出新图片。请单独保存源文件，不要直接覆盖私密原图。</p></div>
-        <div class="content-panel"><h3>3. 再次复查结果</h3><p>上传前重新打开导出的文件，确认可见内容、尺寸、格式和文件名都适合目标平台。</p></div>
+        <div class="content-panel"><h3>3. 再次复查结果</h3><p>上传前重新打开导出文件，在最后一次编辑后再次检查元数据，并确认可见内容、尺寸、格式和文件名适合目标平台。</p></div>
       </div>
     </section>
 
@@ -168,12 +170,12 @@
       <h2 id="imageprivacy-faq">ImagePrivacy 常见问题</h2>
       <div class="faq-list">
         <details><summary>ImagePrivacy 主要解决什么问题？</summary><p>它帮助你准备更安全的公开图片副本，包括减少隐藏元数据、遮挡可见隐私、添加水印、调整尺寸、压缩和转换格式。</p></details>
-        <details><summary>工具会上传我的图片吗？</summary><p>这些工具按浏览器端处理设计。你可以在设备上生成清理后的副本，而不是把原图上传到服务器处理。</p></details>
+        <details><summary>工具会上传我的图片吗？</summary><p>工具设计为在浏览器内处理所选图片。加载网站、广告和统计仍会发出外部请求。本地处理不代表独立安全认证，请查看<a href="/zh/privacy/">隐私政策</a>。</p></details>
         <details><summary>删除 EXIF 就足够了吗？</summary><p>不一定。EXIF 清理只能减少隐藏元数据风险，图片里肉眼可见的信息仍然需要人工复查，必要时用遮挡工具处理。</p></details>
         <details><summary>我应该分享原图吗？</summary><p>通常不建议。更稳妥的做法是分享经过清理、尺寸合适、格式正确且不包含多余可见信息的公开副本。</p></details>
       </div>
     </section>
-    <footer><span><a href="/zh/privacy/">隐私策略</a> · <a href="/zh/terms/">服务条款</a></span></footer>
+    <footer><span><a href="/zh/privacy/">隐私策略</a> · <a href="/zh/terms/">服务条款</a></span><span><a href="/zh/editorial-policy/">编辑政策</a> · <a href="/zh/privacy/#choices">广告与隐私选择</a></span><a href="/zh/privacy/#choices" data-privacy-settings hidden>隐私和 Cookie 设置</a></footer>
   </main>
   <script>
     const canvas=document.getElementById("image-scene"),ctx=canvas.getContext("2d");function draw(){const r=canvas.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,r.width,r.height);ctx.fillStyle="#fff";ctx.fillRect(0,0,r.width,r.height);const t=Date.now()/1500;for(let i=0;i<9;i++){const x=18+(i%3)*(r.width-50)/2,y=18+Math.floor(i/3)*(r.height-50)/2,w=42,h=34;ctx.fillStyle=["#eef7f1","#eef4ff","#fff7ed"][i%3];ctx.strokeStyle=["#0f8a6a","#2563eb","#b45309"][i%3];ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect(x,y,w,h,6);ctx.fill();ctx.stroke();ctx.fillStyle=ctx.strokeStyle;ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(x+12+Math.sin(t+i)*2,y+12,4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.beginPath();ctx.moveTo(x+8,y+h-8);ctx.lineTo(x+19,y+20+Math.cos(t+i)*2);ctx.lineTo(x+28,y+h-8);ctx.lineTo(x+34,y+24);ctx.lineTo(x+w-7,y+h-8);ctx.stroke()}ctx.strokeStyle="#d6ded8";ctx.lineWidth=1;for(let x=12;x<r.width;x+=24){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,r.height);ctx.stroke()}for(let y=12;y<r.height;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(r.width,y);ctx.stroke()}requestAnimationFrame(draw)}draw();
