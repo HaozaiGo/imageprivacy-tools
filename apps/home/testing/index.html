@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ImagePrivacy testing methodology for metadata removal, redaction, watermarking, resizing, compression, conversion, and local processing claims.">
+  <meta name="robots" content="index, follow">
+  <meta name="google-adsense-account" content="ca-pub-5333037258750046">
+  <link rel="canonical" href="https://imageprivacy.org/testing/">
+  <link rel="alternate" hreflang="en" href="https://imageprivacy.org/testing/">
+  <link rel="alternate" hreflang="zh-CN" href="https://imageprivacy.org/zh/testing/">
+  <link rel="alternate" hreflang="x-default" href="https://imageprivacy.org/testing/">
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/legal.css">
+  <title>How ImagePrivacy Tests Image Tools</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"How ImagePrivacy Tests Image Tools","dateModified":"2026-10-20","publisher":{"@type":"Organization","name":"ImagePrivacy","url":"https://imageprivacy.org/"}}</script>
+</head>
+<body>
+  <header class="top"><nav class="nav" aria-label="Main navigation"><a class="brand" href="/">ImagePrivacy</a><div class="nav-links"><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/zh/testing/">中文</a></div></nav></header>
+  <main>
+    <div class="eyebrow">Testing methodology</div>
+    <h1>How we test image privacy tools and their limits.</h1>
+    <p class="lead">A successful download is not proof that an image is safe to publish. ImagePrivacy separates hidden metadata, visible private details, output quality, and network behavior into checks that can be repeated with disposable sample files.</p>
+    <p class="guide-meta">Maintained by ImagePrivacy · Last reviewed October 20, 2026 · Current reference browser: Chrome 155 on macOS</p>
+
+    <section class="panel"><h2>Our disposable sample set</h2><p>Tests use images created for this site rather than personal photos. The set includes a JPEG with harmless EXIF fields, a PNG screenshot with invented account details, a transparent image, a high-resolution gradient, and an HEIC sample. No customer file is needed. Originals are kept separate so every exported copy can be compared with the same source.</p></section>
+    <section class="panel"><h2>Local-processing verification</h2><p>We open DevTools, clear the Network panel, disable cache, select the sample, perform the edit, and download the result. Requests for application code or analytics are recorded separately from file transmission. A local-processing claim passes only when file bytes and rendered output stay inside the browser runtime. We repeat the check after reloading so cached requests do not hide an upload.</p></section>
+
+    <figure class="evidence"><img src="/assets/exif-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy EXIF remover upload screen"><figcaption>Original review capture from October 20, 2026. The EXIF workflow separates metadata inspection from visible-image review; removing metadata cannot hide a face, address, badge, or screen shown in the pixels.</figcaption></figure>
+
+    <h2>Current review matrix</h2>
+    <table class="test-table">
+      <thead><tr><th>Tool</th><th>What we check</th><th>Independent verification</th><th>Important limit</th></tr></thead>
+      <tbody>
+        <tr><td>EXIF Remover</td><td>Read metadata, flag GPS, export cleaned copy</td><td>Inspect the exported file again</td><td>Does not remove visible private details</td></tr>
+        <tr><td>Watermark Tool</td><td>Text placement, opacity, scale, export</td><td>Open final pixels at 100% zoom</td><td>A watermark is context, not access control</td></tr>
+        <tr><td>Image Redactor</td><td>Solid, blur, and pixelated regions</td><td>Inspect flattened export, not editor preview</td><td>Blur may leave recognizable context</td></tr>
+        <tr><td>Image Resizer</td><td>Dimensions, ratio lock, orientation, format</td><td>Read exported pixel dimensions</td><td>Smaller size does not hide visible content</td></tr>
+        <tr><td>Image Compressor</td><td>Batch queue, quality, size reduction, ZIP</td><td>Open representative outputs and compare size</td><td>Quality values differ between encoders</td></tr>
+        <tr><td>Image Converter</td><td>HEIC decode, JPEG/PNG/WebP export</td><td>Open output in its destination workflow</td><td>Sequences, depth data, and profiles may be lost</td></tr>
+      </tbody>
+    </table>
+
+    <section class="panel"><h2>Metadata is checked after export</h2><p>Canvas-based export commonly creates a metadata-light derivative, but assumptions are not enough. We reopen the downloaded file with the EXIF inspector and compare metadata categories. The review records whether GPS, camera, software, orientation, and date fields remain. A clean report applies to that exported copy only, not to the private original or a file produced by another application.</p></section>
+    <section class="panel"><h2>Visible privacy is a separate human review</h2><p>Automated metadata checks cannot identify every face, shipping label, reflection, browser tab, QR code, document ID, or background screen. For redaction, we inspect the flattened export at normal size and at 100% zoom. High-risk details should use an opaque box rather than blur, because blur and pixelation can preserve shapes and context.</p></section>
+
+    <figure class="evidence"><img src="/assets/convert-tool.png" width="1280" height="800" loading="lazy" alt="ImagePrivacy image converter interface"><figcaption>The conversion review checks that the upload area is usable, the format choice is explicit, the exported file reopens, and the guide explains what a browser conversion may discard.</figcaption></figure>
+
+    <section class="panel"><h2>Quality and compatibility checks</h2><p>We compare dimensions, file size, transparency, orientation, text edges, gradients, and color appearance in the downloaded file. JPEG and WebP quality sliders are encoder controls, not universal scores. HEIC support depends on the browser decoder, so one representative file must be tested in the real destination before a batch is converted.</p></section>
+    <section class="panel"><h2>Failure paths, accessibility, and mobile</h2><p>Each tool is checked with an unsupported file, an empty selection, repeated actions, download controls, keyboard navigation, language switching, and a 390 CSS pixel viewport. Errors should explain the next step without presenting an advertisement as a download or result control. Upload regions, previews, and controls must remain readable without horizontal scrolling.</p></section>
+    <section class="panel"><h2>Corrections and repeatability</h2><p>Important tool or guide changes are listed in the <a href="/changelog/">public changelog</a>. To report a reproducible issue, include the tool URL, browser version, input format and dimensions, expected result, and actual result. Do not email a private source image; create a harmless sample or describe the failure at <a href="mailto:contact@imageprivacy.org">contact@imageprivacy.org</a>.</p></section>
+
+    <footer><a href="/editorial-policy/">Editorial policy</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></footer>
+  </main>
+</body>
+</html>
