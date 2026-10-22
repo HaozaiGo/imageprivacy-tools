@@ -93,7 +93,7 @@
       },
       {
         "@type": "Question",
-        "name": "Do the image tools upload my files?",
+        "name": "Are my images uploaded, and does the website work offline?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "The tools are designed to process selected image files in your browser. Loading the website, ads, and analytics still makes external requests. Local file processing is not a claim that the website is offline or independently security-certified."
@@ -131,13 +131,12 @@
   <header class="top"><nav class="nav" aria-label="Main navigation"><div class="brand"><span class="mark"><img src="logo.svg" alt="" width="22" height="22"></span><span>ImagePrivacy</span></div><div class="nav-links"><a href="/guides/">Guides</a><span>·</span><a href="/testing/">Verification checklist</a><span>·</span><a href="/about/">About</a><span>·</span><a href="/contact/">Contact</a><span>·</span><a href="/zh/">中文</a></div></nav></header>
   <main>
     <section class="intro" aria-labelledby="title"><div><h1 id="title">ImagePrivacy</h1><p class="lead">Remove photo metadata, cover private details, and prepare an image copy to share. Image processing is designed to run in your browser. No account needed.</p><div class="hero-points" aria-label="ImagePrivacy highlights"><span>Privacy-first</span><span>Runs in your browser</span><span>No account</span><span>Publishing checklist</span></div></div><div class="scene" aria-hidden="true"><canvas id="image-scene"></canvas></div></section>
-    <p class="trust-strip">Browser-side image processing does not mean this website is offline. Page resources, ads, and analytics make network requests. <a href="/privacy/">Read what is processed and your privacy choices</a>.</p>
     <section class="grid" aria-label="Image privacy tools">
       <a class="card" href="https://exif.imageprivacy.org/"><div class="card-top"><strong>EXIF Remover</strong><span class="icon green">EX</span></div><span>Inspect and remove hidden photo metadata before sharing a public copy.</span></a>
       <a class="card" href="https://watermark.imageprivacy.org/"><div class="card-top"><strong>Watermark Tool</strong><span class="icon blue">WM</span></div><span>Add readable text watermarks for previews, proofs, listings, and public images.</span></a>
       <a class="card" href="https://redact.imageprivacy.org/"><div class="card-top"><strong>Image Redactor</strong><span class="icon green">RD</span></div><span>Hide faces, addresses, screens, documents, and other visible private details.</span></a>
-      <a class="card" href="https://resize.imageprivacy.org/"><div class="card-top"><strong>Image Resizer</strong><span class="icon blue">RS</span></div><span>Create smaller public copies while keeping original images private.</span></a>
-      <a class="card" href="https://compress.imageprivacy.org/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>Reduce image file sizes and compare the exported results. Format support depends on the input and decoder.</span></a>
+      <a class="card" href="https://resize.imageprivacy.org/"><div class="card-top"><strong>Crop &amp; Resize</strong><span class="icon blue">RS</span></div><span>Crop, rotate, flip, and resize a copy before sending it to compression.</span></a>
+      <a class="card" href="https://compress.imageprivacy.org/"><div class="card-top"><strong>Image Compressor</strong><span class="icon green">CP</span></div><span>Set an upload size limit, inspect the result, and see whether each image meets your target.</span></a>
       <a class="card" href="https://convert.imageprivacy.org/"><div class="card-top"><strong>Image Converter</strong><span class="icon blue">CV</span></div><span>Convert supported images to JPEG, PNG, or WebP. Check the exported file; conversion alone is not a privacy check.</span></a>
     </section>
     <section class="group" aria-labelledby="latest-guides">
@@ -173,7 +172,7 @@
       <h2 id="imageprivacy-faq">ImagePrivacy FAQ</h2>
       <div class="faq-list">
         <details><summary>What does ImagePrivacy help with?</summary><p>It helps you prepare safer public copies of images by reducing hidden metadata, redacting visible details, adding watermarks, resizing, compressing, and converting formats.</p></details>
-        <details><summary>Do the tools upload my files?</summary><p>The tools are designed to process selected image files in your browser. Loading the website, ads, and analytics still makes external requests. Local processing is not an independent security certification. See the <a href="/privacy/">privacy policy</a>.</p></details>
+        <details><summary>Are my images uploaded, and does the website work offline?</summary><p>The tools are designed to process selected image files in your browser. This does not mean the website works offline: page resources, ads, and analytics still make network requests. Local processing is not an independent security certification. See the <a href="/privacy/">privacy policy and your privacy choices</a>.</p></details>
         <details><summary>Does removing EXIF hide everything private?</summary><p>No. EXIF removal reduces hidden metadata, but visible information inside the image still needs manual review and redaction when necessary.</p></details>
         <details><summary>Should I share the original image?</summary><p>Usually no. Share a cleaned copy that has only the size, format, metadata, and visible details needed for the public context.</p></details>
       </div>

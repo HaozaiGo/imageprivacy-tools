@@ -1,0 +1,9 @@
+.ip-workflow[hidden],.ip-workflow [hidden],.ip-transfer-status[hidden]{display:none!important}
+.ip-workflow{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-top:18px;padding:16px 0;border-top:1px solid var(--line)}
+.ip-workflow label{display:grid;gap:5px;min-width:0;flex:1 1 160px;max-width:320px;font-size:13px;color:var(--muted)}
+.ip-workflow select{width:100%;min-width:0;height:40px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--input);color:var(--text);font:inherit}
+.ip-workflow button{min-height:40px;padding:8px 14px;border:1px solid #0f766e;border-radius:6px;background:#0f766e;color:white;font:inherit;font-size:14px;cursor:pointer}
+.ip-workflow button:disabled{opacity:.5;cursor:not-allowed}
+.ip-workflow :focus-visible{outline:2px solid #10b981;outline-offset:3px}
+.ip-transfer-status{margin:0 0 16px;padding:10px 0;border-bottom:1px solid var(--line);color:var(--text);font-size:14px;overflow-wrap:anywhere}
+@media(max-width:480px){.ip-workflow label{max-width:none}.ip-workflow button{width:100%}}

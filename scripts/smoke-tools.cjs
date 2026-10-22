@@ -121,7 +121,7 @@ async function serve(app) {
       const filename = path.resolve(root, '.' + pathname);
       if (!filename.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
       const body = await fs.readFile(filename);
-      const types = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.css': 'text/css', '.png': 'image/png' };
+      const types = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml' };
       res.writeHead(200, { 'Content-Type': types[path.extname(filename)] || 'application/octet-stream' }).end(body);
     } catch (_) { res.writeHead(404).end(); }
   });

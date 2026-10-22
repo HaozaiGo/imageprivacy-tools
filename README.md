@@ -56,7 +56,45 @@ The report contains per-page results and fails the command when issues remain.
 Passing these checks is evidence of technical readiness, not an AdSense approval
 or a substitute for Google's content review.
 
-## Functional Regression Checks
+## Local Image Workflow
+
+```bash
+npm run dev -- --port 4174
+```
+
+Open `http://127.0.0.1:4174/zh/` or `/`. The local server mirrors independent
+tool domains under `/redact/`, `/resize/`, and `/compress/` so the whole editing
+workflow can be tried without changing production canonical URLs.
+
+Redact an image, continue to crop/resize, then continue to compression. Only
+the edited result is passed to the new tab, using a one-time token and strict
+origin/window checks. Keep the source tab open until receipt is confirmed.
+This pathway does not persist image bytes or upload them; ads and page
+resources remain separate network requests. Pop-up blocking has a manual
+download fallback. Transfers accept PNG/JPEG/WebP results up to 30 MB.
+
+Shared workflow assets are authored in `shared/`. Run `npm run sync:workflow`
+after editing; `npm run check` verifies the deployed app copies match.
+
+```bash
+npm run test:workflow
+npm run test:workflow-cancel
+npm run test:crop
+npm run test:targets
+```
+
+This suite exercises the full redaction-to-compression journey with local
+files served under distinct production-like origins, plus the loopback path
+layout. It verifies output pixels/dimensions, language retention, mobile
+overflow, popup failure, origin/window/token rejection, and replay rejection.
+`--online` uses the deployed origins and should only be run after release.
+Browser tests block ad requests and do not prove AdSense or CMP approval.
+Crop tests inspect actual exported pixels for rotations, reflections and crop
+rectangles. Target tests verify exact byte ceilings, impossible targets,
+settings snapshots, optional resizing, cancellation, and transparency. AVIF
+attempt budgeting uses a controlled encoder, not a real AVIF quality test.
+
+## Tool Regression Checks
 
 ```bash
 npm run test:tools

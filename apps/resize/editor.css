@@ -1,0 +1,55 @@
+:root{--bg:#121416;--panel:#1d2023;--input:#16191c;--line:#454b50;--muted:#b0b7bd;--blue:#2563eb;--radius:8px}
+.header{background:var(--bg)}
+.card{padding:0;border:0;background:none}
+.editor{align-items:start}
+.preview{min-width:0;padding:0;border-radius:8px;overflow:hidden;background:var(--panel)}
+.controls{min-width:0}
+.control{padding:0 0 12px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none}
+.control label{letter-spacing:0;text-transform:none}
+.row>*{min-width:0}
+.drop{border-radius:8px}
+.file{width:100%;height:100%}
+.drop:focus-within{outline:3px solid #93c5fd;outline-offset:3px}
+.seo section{border:0;border-top:1px solid var(--line);border-radius:0;background:none;padding:16px 0}
+.preview .meta{padding:0 12px;text-align:left;overflow-wrap:anywhere}
+.image-stage{aspect-ratio:4/3;min-width:0;position:relative;background:#111}
+.image-stage>img{display:block;max-width:100%;max-height:100%;margin:auto}
+.edit-toolbar{margin:0;padding:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:0;border-bottom:1px solid var(--line)}
+.icon-button{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--input);color:var(--text);cursor:pointer;position:relative}
+.icon-button::before{content:"";width:22px;height:22px;background:currentColor;mask:var(--icon) center / contain no-repeat;-webkit-mask:var(--icon) center / contain no-repeat}
+.icon-button[data-icon="crop"]{--icon:url("vendor/crop.svg")}
+.icon-button[data-icon="rotate-ccw"]{--icon:url("vendor/rotate-ccw.svg")}
+.icon-button[data-icon="rotate-cw"]{--icon:url("vendor/rotate-cw.svg")}
+.icon-button[data-icon="flip-horizontal-2"]{--icon:url("vendor/flip-horizontal-2.svg")}
+.icon-button[data-icon="flip-vertical-2"]{--icon:url("vendor/flip-vertical-2.svg")}
+.icon-button[data-icon="undo-2"]{--icon:url("vendor/undo-2.svg")}
+.icon-button[aria-pressed="true"]{color:#bbf7d0;background:#14532d;border-color:#4ade80}
+.icon-button:hover:not(:disabled){border-color:#e2e8f0}
+.tool-tip{position:absolute;z-index:5;left:0;top:calc(100% + 5px);display:none;width:max-content;max-width:170px;padding:5px 8px;background:#fff;color:#111;font-size:12px;font-weight:400;white-space:normal;pointer-events:none}
+.icon-button:last-child .tool-tip{left:auto;right:0}
+.icon-button:hover .tool-tip,.icon-button:focus-visible .tool-tip{display:block}
+button:focus-visible,input:focus-visible,select:focus-visible,.image-stage:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+button:disabled,fieldset:disabled .icon-button{opacity:.45;cursor:not-allowed}
+.crop-controls{margin:0;padding:0 0 12px;min-width:0;border:0;border-bottom:1px solid var(--line)}
+.crop-controls legend{font-size:.95rem;font-weight:650;padding:0;margin-bottom:10px}
+.crop-controls label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px}
+.crop-controls .row{margin-top:10px}
+.crop-controls[hidden]{display:none}
+.crop-status{font-size:.8rem;color:var(--muted);margin:8px 0 0;min-height:1.3em}
+.cropper-point{width:12px;height:12px;background:#22c55e;opacity:1}
+.cropper-point.point-e{right:-6px;margin-top:-6px}
+.cropper-point.point-w{left:-6px;margin-top:-6px}
+.cropper-point.point-n{top:-6px;margin-left:-6px}
+.cropper-point.point-s{bottom:-6px;margin-left:-6px}
+.cropper-point.point-ne{right:-6px;top:-6px}
+.cropper-point.point-nw{left:-6px;top:-6px}
+.cropper-point.point-sw{left:-6px;bottom:-6px}
+.cropper-point.point-se{right:-6px;bottom:-6px;width:16px;height:16px}
+.cropper-line{background:#22c55e}
+.cropper-view-box{outline-color:#22c55e}
+footer a{color:#cbd5e1;text-underline-offset:3px}
+footer a:hover,footer a:focus-visible{color:#fff}
+@media(max-width:780px){.edit-toolbar{gap:4px;padding:8px}.main{padding-left:16px;padding-right:16px}.drop{padding:24px 16px}.controls{gap:16px}}
+@media(max-width:380px){.icon-button:last-child .tool-tip{left:0;right:auto}.icon-button:nth-child(5) .tool-tip{left:auto;right:0}}
+@media(hover:none){.icon-button:hover:not(:focus-visible) .tool-tip{display:none}}
+@media(pointer:coarse){.cropper-point{width:20px;height:20px}.cropper-point.point-se{width:24px;height:24px}}

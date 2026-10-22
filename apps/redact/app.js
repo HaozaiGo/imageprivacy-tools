@@ -9,9 +9,23 @@
   canvas.style.touchAction = 'none';
   download.disabled = true;
 
-  async function load(file) {
-    if (!file) return;
+  async function load(file, { signal } = {}) {
+    if (!file || signal?.aborted) return false;
     const request = ++revision;
+    let resolveAbort;
+    const aborted = new Promise(resolve => { resolveAbort = resolve; });
+    const abort = () => {
+      if (request === revision) {
+        revision++;
+        cancel();
+        image = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        download.disabled = true;
+        meta.textContent = '';
+      }
+      resolveAbort(false);
+    };
+    signal?.addEventListener('abort', abort, { once: true });
     cancel();
     image = null;
     rects = [];
@@ -23,8 +37,8 @@
     try {
       const candidate = new Image();
       candidate.src = url;
-      await candidate.decode();
-      if (request !== revision) return;
+      if (!await Promise.race([candidate.decode().then(() => true), aborted])) return false;
+      if (request !== revision) return false;
       image = candidate;
       const scale = Math.min(1, 1200 / image.naturalWidth, 1200 / image.naturalHeight);
       canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
@@ -34,9 +48,12 @@
         : `Original ${image.naturalWidth} x ${image.naturalHeight}; editing ${canvas.width} x ${canvas.height} copy`;
       download.disabled = false;
       draw();
+      return true;
     } catch (_) {
       if (request === revision) meta.textContent = zh ? '这个文件无法在浏览器中解码。' : 'This file could not be decoded in the browser.';
+      return false;
     } finally {
+      signal?.removeEventListener('abort', abort);
       URL.revokeObjectURL(url);
     }
   }
@@ -132,24 +149,33 @@
   drop.addEventListener('drop', event => { event.preventDefault(); load(event.dataTransfer.files[0]); });
   $('undo').onclick = () => { cancel(); rects.pop(); draw(); };
   $('clear').onclick = () => { cancel(); rects = []; draw(); };
-  download.onclick = () => {
-    if (!image || download.disabled) return;
+  async function exportImage() {
+    if (!image || download.disabled) throw new Error('Image is not ready');
     commitDraft();
     const request = revision;
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob || request !== revision) throw new Error('Image changed or could not be exported');
+    return new File([blob], 'redacted-image.png', { type: 'image/png' });
+  }
+  download.onclick = async () => {
+    if (!image || download.disabled) return;
+    const request = revision;
+    const output = exportImage();
     download.disabled = true;
-    canvas.toBlob(blob => {
+    try {
+      const blob = await output;
       if (request !== revision) return;
-      download.disabled = false;
-      if (!blob) {
-        meta.textContent = zh ? '无法导出图片，请尝试更小的图片。' : 'Could not export this image. Try a smaller image.';
-        return;
-      }
       const url = URL.createObjectURL(blob), anchor = document.createElement('a');
-      anchor.download = 'redacted-image.png';
+      anchor.download = blob.name;
       anchor.href = url;
       anchor.click();
       setTimeout(() => URL.revokeObjectURL(url), 1500);
-    }, 'image/png');
+    } catch (_) {
+      if (request === revision) meta.textContent = zh ? '无法导出图片，请尝试更小的图片。' : 'Could not export this image. Try a smaller image.';
+    } finally {
+      if (request === revision) download.disabled = !image;
+    }
   };
+  window.ImagePrivacyEditor = { load, exportImage };
   file.disabled = false;
 }());

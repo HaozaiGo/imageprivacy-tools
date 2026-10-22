@@ -10,7 +10,7 @@
   <link rel="alternate" hreflang="en" href="https://compress.imageprivacy.org/">
   <link rel="alternate" hreflang="zh-CN" href="https://compress.imageprivacy.org/zh/">
   <link rel="alternate" hreflang="x-default" href="https://compress.imageprivacy.org/">
-  <link rel="stylesheet" href="/app.css?v=3">
+  <link rel="stylesheet" href="/app.css?v=4">
   <title>批量图片压缩工具 | 压缩 HEIC、PNG、JPEG、WebP、AVIF</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"批量图片压缩工具","url":"https://compress.imageprivacy.org/zh/","applicationCategory":"MultimediaApplication","operatingSystem":"All","browserRequirements":"Requires JavaScript and WebAssembly","isAccessibleForFree":true,"description":"在浏览器本地批量压缩 HEIC、JPEG、PNG、WebP 和 AVIF 图片，对比输出质量，并单独下载或打包下载。","featureList":["批量图片压缩","HEIC 解码","JPEG、WebP、PNG 和 AVIF 导出","目标文件大小","压缩前后对比","ZIP 打包下载","浏览器本地处理"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"ImagePrivacy","url":"https://imageprivacy.org/zh/"}}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046" crossorigin="anonymous"></script>
@@ -35,8 +35,9 @@
           <div class="field"><label for="format">输出格式</label><select id="format"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option><option value="image/avif">AVIF</option></select></div>
           <div class="field"><label for="quality">图片质量 <output id="q" for="quality">75%</output></label><input id="quality" type="range" min="30" max="95" value="75"></div>
           <div class="field"><label for="maxw">最大宽度</label><input id="maxw" type="number" min="1" max="16000" value="1920"><small>不会放大尺寸较小的图片。</small></div>
-          <div class="field"><label for="target">目标大小（KB）</label><input id="target" type="number" min="1" max="50000" placeholder="可选"><small>工具会采用最接近的可行结果。</small></div>
+          <div class="field target-field"><label for="target">目标上限（KB）</label><div class="target-controls"><select id="target-preset" aria-label="目标预设"><option value="">不设目标</option><option value="200">200 KB</option><option value="500">500 KB</option><option value="1000">1 MB</option><option value="custom">自定义</option></select><input id="target" type="number" min="0.001" max="50000" step="0.001" placeholder="可选" aria-describedby="target-unit"></div><small id="target-unit">1 KB = 1000 字节 · 1 MB = 1000000 字节</small></div>
           <div id="background-field" class="field"><label for="background">JPEG 背景色</label><input id="background" type="color" value="#ffffff"><small>透明图片导出 JPEG 时使用。</small></div>
+          <label class="resize-option" for="auto-resize"><input id="auto-resize" type="checkbox">自动缩小尺寸以达到目标 <span>每边至少 64 像素；更小的原图保持尺寸。</span></label>
         </section>
         <div class="toolbar">
           <button id="compress-all" class="button primary" type="button">压缩全部</button>
@@ -54,10 +55,10 @@
       <section><h2>本地压缩如何工作</h2><p>浏览器会解码原图、按需缩小尺寸并生成新文件。JPEG 和 WebP 使用质量编码，PNG 使用颜色量化，AVIF 使用本地 WebAssembly 编码器。</p></section>
       <section><h2>如何选择输出格式</h2><p>照片和广泛兼容场景选择 JPEG；现代网页图片选择 WebP；透明背景和界面图选择 PNG；目标平台支持新格式时可选择 AVIF。</p></section>
       <section><h2>处理 HEIC 照片</h2><p>HEIC 和 HEIF 文件会先在浏览器中本地解码，再压缩为更通用的公开副本，原始照片不需要发送到服务器。</p></section>
-      <section><h2>图片质量和目标大小</h2><p>建议从 75% 质量开始，并填写目标场景需要的最大宽度。目标大小是可选项，工具会在本地多次尝试编码并保留最接近的结果。</p></section>
+      <section><h2>图片质量和目标大小</h2><p>目标大小是严格的字节上限。工具先尝试降低编码质量，勾选自动缩小后还会进行最多六次尺寸调整，每边不低于 64 像素，原本更小的图片除外。结果会显示实际字节数、尺寸和编码设置。</p></section>
       <section><h2>下载前对比检查</h2><p>使用每张图片上的对比滑块检查文字、人脸、商品细节、渐变和清晰边缘。文件变小并不代表画质一定适合发布。</p></section>
       <section><h2>隐私和元数据</h2><p>重新编码会生成元数据更少的新副本，但压缩不能隐藏画面里的可见隐私。请先遮挡敏感内容，需要单独核验元数据时再使用 EXIF 工具。</p></section>
-      <section><h2>常见问题</h2><p><strong>目标大小能完全准确吗？</strong><br>不能。图片内容和编码器限制会影响结果，工具会在不超出尺寸设置的前提下返回最接近的文件。</p><p><strong>批量压缩会上传图片吗？</strong><br>不会，图片处理和 ZIP 打包都在当前浏览器标签页完成。</p></section>
+      <section><h2>常见问题</h2><p><strong>能保证达到目标大小吗？</strong><br>不能。只有实际字节数不超过上限时才会标记“已达到目标”。有限次数的尝试仍无法达标时，会保留本次尝试中最小的文件，并明确提示“未达到目标”。只有勾选自动缩小时，才会在最大宽度设置之外继续降低尺寸。</p><p><strong>批量压缩会上传图片吗？</strong><br>不会，图片处理和 ZIP 打包都在当前浏览器标签页完成。</p></section>
     </div>
     <footer><a href="https://imageprivacy.org/zh/privacy/">隐私策略</a> · <a href="https://imageprivacy.org/zh/terms/">服务条款</a></footer>
   </main>
@@ -66,6 +67,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js"></script>
-  <script defer src="/app.js?v=3"></script>
+  <link rel="stylesheet" href="/workflow.css">
+  <script defer src="/workflow.js"></script>
+  <script defer src="/app.js?v=4"></script>
+  <script defer src="/workflow-adapter.js"></script>
 </body>
 </html>

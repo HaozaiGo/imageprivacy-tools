@@ -7,6 +7,13 @@
     "apps/*"
   ],
   "scripts": {
+    "dev": "node scripts/dev-server.cjs",
+    "sync:workflow": "node scripts/sync-workflow.cjs",
+    "check:workflow": "node scripts/sync-workflow.cjs --check",
+    "test:workflow": "node tests/workflow.cjs",
+    "test:workflow-cancel": "node tests/workflow-cancel.cjs",
+    "test:crop": "node tests/resize-crop.cjs",
+    "test:targets": "node tests/compress-target.cjs",
     "check": "node scripts/check-static.js",
     "audit:local": "node scripts/audit-sites.cjs",
     "audit:online": "node scripts/audit-sites.cjs --online",

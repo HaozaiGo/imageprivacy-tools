@@ -16,7 +16,17 @@
     decodeFailed: "浏览器无法解码这张图片。",
     encoderMissing: "压缩组件加载失败，请刷新页面后重试。",
     avifLoading: "正在加载本地 AVIF 编码器...",
-    targetClosest: "已采用最接近目标大小的结果",
+    targetMet: "已达到目标",
+    targetUnmet: "未达到目标",
+    targetInvalid: "目标大小必须为 0.001 至 50000 KB，最多三位小数（1 KB = 1000 字节）。",
+    targetLimit: "上限",
+    targetRetry: "已保留本次尝试中最小的文件；请提高上限或更改格式。",
+    quality: "编码质量",
+    colors: "色数上限",
+    lossless: "无损 PNG",
+    background: "背景色",
+    changed: "设置已更改，请重新压缩以应用。",
+    unmetCount: "张未达到目标",
     original: "原图",
     compressed: "压缩后",
     output: "输出",
@@ -45,7 +55,17 @@
     decodeFailed: "The browser could not decode this image.",
     encoderMissing: "A compression component failed to load. Refresh the page and try again.",
     avifLoading: "Loading the local AVIF encoder...",
-    targetClosest: "Closest result to the target size",
+    targetMet: "Target met",
+    targetUnmet: "Target not met",
+    targetInvalid: "Target must be 0.001–50000 KB, with at most three decimal places (1 KB = 1000 bytes).",
+    targetLimit: "limit",
+    targetRetry: "Smallest attempted file kept; raise the limit or change format.",
+    quality: "Encoder quality",
+    colors: "Color limit",
+    lossless: "Lossless PNG",
+    background: "Background",
+    changed: "Settings changed; compress again to apply.",
+    unmetCount: "over target",
     original: "Original",
     compressed: "Compressed",
     output: "Output",
@@ -64,6 +84,9 @@
 
   const MAX_FILES = 20;
   const MAX_BYTES = 30 * 1024 * 1024;
+  const MIN_QUALITY = 15;
+  const MIN_DIMENSION = 64;
+  const MAX_RESIZE_ATTEMPTS = 6;
   const ACCEPTED = /\.(jpe?g|png|webp|avif|heic|heif)$/i;
   const AVIF_MODULE = "https://cdn.jsdelivr.net/npm/@jsquash/avif@2.1.1/encode.js/+esm";
   const state = { items: [], busy: false, nextId: 1, avifEncoder: null };
@@ -77,6 +100,8 @@
     qualityOutput: document.getElementById("q"),
     maxWidth: document.getElementById("maxw"),
     target: document.getElementById("target"),
+    targetPreset: document.getElementById("target-preset"),
+    autoResize: document.getElementById("auto-resize"),
     background: document.getElementById("background"),
     backgroundField: document.getElementById("background-field"),
     compressAll: document.getElementById("compress-all"),
@@ -92,9 +117,9 @@
   }
 
   function formatBytes(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(bytes < 10240 ? 1 : 0)} KB`;
-    return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    if (bytes < 1000) return `${bytes} B`;
+    if (bytes < 1000000) return `${(bytes / 1000).toFixed(bytes < 10000 ? 1 : 0)} KB`;
+    return `${(bytes / 1000000).toFixed(2)} MB`;
   }
 
   function baseName(name) {
@@ -115,7 +140,7 @@
     elements.clearAll.disabled = value;
     elements.file.disabled = value;
     elements.downloadZip.disabled = value;
-    for (const input of [elements.format, elements.quality, elements.maxWidth, elements.target, elements.background]) {
+    for (const input of [elements.format, elements.quality, elements.maxWidth, elements.target, elements.targetPreset, elements.autoResize, elements.background]) {
       input.disabled = value;
     }
   }
@@ -152,7 +177,9 @@
     });
   }
 
-  async function addFiles(fileList) {
+  async function addFiles(fileList, { signal } = {}) {
+    // Transfer integration entry point: pass File objects through this same queue/decode path.
+    if (state.busy || signal?.aborted) return false;
     setNotice("");
     const available = MAX_FILES - state.items.length;
     const incoming = Array.from(fileList);
@@ -174,44 +201,68 @@
         status: "loading",
         statusText: isHeic(file) ? copy.decodingHeic : copy.loading,
         error: "",
-        targetUsed: false
+        settings: null
       }));
-    state.items.push(...pending);
-    render();
-    for (const item of pending) {
-      if (!state.items.includes(item)) continue;
-      const file = item.file;
-
-      if (!ACCEPTED.test(file.name) && !/^image\/(jpeg|png|webp|avif|heic|heif)$/i.test(file.type)) {
-        item.status = "error";
-        item.error = copy.unsupported;
-        render();
-        continue;
-      }
-      if (file.size > MAX_BYTES) {
-        item.status = "error";
-        item.error = copy.tooLarge;
-        render();
-        continue;
-      }
-
-      try {
-        const sourceBlob = await prepareSource(file);
-        const dimensions = await getDimensions(sourceBlob);
-        if (!state.items.includes(item)) continue;
-        item.sourceBlob = sourceBlob;
-        item.width = dimensions.width;
-        item.height = dimensions.height;
-        item.sourceUrl = URL.createObjectURL(item.sourceBlob);
-        item.status = "ready";
-        item.statusText = copy.ready;
-      } catch (error) {
-        item.status = "error";
-        item.error = isHeic(file) ? (error.message || copy.decodeFailed) : copy.decodeFailed;
+    let resolveAbort;
+    const aborted = new Promise(resolve => { resolveAbort = resolve; });
+    const cancel = () => {
+      // Only this import owns these entries; manual uploads and other transfers stay intact.
+      state.items = state.items.filter(item => !pending.includes(item));
+      for (const item of pending) {
+        if (item.sourceUrl) URL.revokeObjectURL(item.sourceUrl);
+        if (item.outputUrl) URL.revokeObjectURL(item.outputUrl);
       }
       render();
+      resolveAbort(false);
+    };
+    state.items.push(...pending);
+    signal?.addEventListener("abort", cancel, { once: true });
+    render();
+    const decode = async () => {
+      for (const item of pending) {
+        if (signal?.aborted || !state.items.includes(item)) continue;
+        const file = item.file;
+
+        if (!ACCEPTED.test(file.name) && !/^image\/(jpeg|png|webp|avif|heic|heif)$/i.test(file.type)) {
+          item.status = "error";
+          item.error = copy.unsupported;
+          render();
+          continue;
+        }
+        if (file.size > MAX_BYTES) {
+          item.status = "error";
+          item.error = copy.tooLarge;
+          render();
+          continue;
+        }
+
+        try {
+          const sourceBlob = await prepareSource(file);
+          if (signal?.aborted || !state.items.includes(item)) continue;
+          const dimensions = await getDimensions(sourceBlob);
+          if (signal?.aborted || !state.items.includes(item)) continue;
+          item.sourceBlob = sourceBlob;
+          item.width = dimensions.width;
+          item.height = dimensions.height;
+          item.sourceUrl = URL.createObjectURL(item.sourceBlob);
+          item.status = "ready";
+          item.statusText = copy.ready;
+        } catch (error) {
+          if (signal?.aborted || !state.items.includes(item)) continue;
+          item.status = "error";
+          item.error = isHeic(file) ? (error.message || copy.decodeFailed) : copy.decodeFailed;
+        }
+        render();
+      }
+      if (!signal?.aborted) elements.file.value = "";
+      return !signal?.aborted && pending.some(item => state.items.includes(item) && item.width > 0 && item.sourceBlob);
+    };
+    try {
+      // Decoders may not support cancellation; settle now and ignore their late resolution/rejection.
+      return await Promise.race([decode(), aborted]);
+    } finally {
+      signal?.removeEventListener("abort", cancel);
     }
-    elements.file.value = "";
   }
 
   async function decodeSource(blob) {
@@ -259,22 +310,26 @@
     });
   }
 
-  function jpegCanvas(canvas) {
+  function jpegCanvas(canvas, background) {
     const output = document.createElement("canvas");
     output.width = canvas.width;
     output.height = canvas.height;
     const context = output.getContext("2d");
-    context.fillStyle = elements.background.value;
+    context.fillStyle = background;
     context.fillRect(0, 0, output.width, output.height);
     context.drawImage(canvas, 0, 0);
     return output;
+  }
+
+  function pngColors(quality) {
+    return quality >= 94 ? 0 : Math.max(16, Math.min(256, Math.round(16 + ((quality - 30) / 64) * 240)));
   }
 
   async function encodePng(canvas, quality) {
     if (!window.UPNG || !window.pako) throw new Error(copy.encoderMissing);
     const context = canvas.getContext("2d", { willReadFrequently: true });
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const colors = quality >= 94 ? 0 : Math.max(16, Math.min(256, Math.round(16 + ((quality - 30) / 64) * 240)));
+    const colors = pngColors(quality);
     const buffer = window.UPNG.encode([imageData.data.buffer], canvas.width, canvas.height, colors);
     return new Blob([buffer], { type: "image/png" });
   }
@@ -298,30 +353,63 @@
     return new Blob([buffer], { type: "image/avif" });
   }
 
-  async function encodeCanvas(canvas, type, quality) {
+  async function encodeCanvas(canvas, type, quality, background) {
     if (type === "image/png") return encodePng(canvas, quality);
     if (type === "image/avif") return encodeAvif(canvas, quality);
-    if (type === "image/jpeg") return canvasToBlob(jpegCanvas(canvas), type, quality);
+    if (type === "image/jpeg") return canvasToBlob(jpegCanvas(canvas, background), type, quality);
     return canvasToBlob(canvas, type, quality);
   }
 
-  async function encodeForTarget(canvas, type, selectedQuality, targetBytes) {
-    let quality = selectedQuality;
-    let blob = await encodeCanvas(canvas, type, quality);
-    if (!targetBytes || blob.size <= targetBytes) return { blob, quality, targetUsed: false };
+  async function encodeForTarget(canvas, settings) {
+    const { type, quality: selectedQuality, targetBytes, background } = settings;
+    const encode = async quality => ({ blob: await encodeCanvas(canvas, type, quality, background), quality, width: canvas.width, height: canvas.height });
+    let smallest = await encode(selectedQuality);
+    if (!targetBytes || smallest.blob.size <= targetBytes) return smallest;
 
-    let low = 15;
-    let high = Math.max(15, selectedQuality - 1);
-    let closest = { blob, quality, distance: Math.abs(blob.size - targetBytes) };
-    for (let attempt = 0; attempt < 5 && low <= high; attempt++) {
-      quality = Math.round((low + high) / 2);
-      const candidate = await encodeCanvas(canvas, type, quality);
-      const distance = Math.abs(candidate.size - targetBytes);
-      if (distance < closest.distance) closest = { blob: candidate, quality, distance };
-      if (candidate.size > targetBytes) high = quality - 1;
+    let fitting = null;
+    const consider = candidate => {
+      if (candidate.blob.size < smallest.blob.size) smallest = candidate;
+      if (candidate.blob.size <= targetBytes && (!fitting || candidate.quality > fitting.quality)) fitting = candidate;
+    };
+    // Always test the quality floor; never discard an observed fit for a closer overshoot.
+    consider(await encode(MIN_QUALITY));
+    let low = MIN_QUALITY + 1;
+    let high = selectedQuality - 1;
+    // WASM AVIF is substantially slower: at most 4 encodes per size, 16 per image.
+    const qualityAttempts = type === "image/avif" ? 2 : 6;
+    for (let attempt = 0; attempt < qualityAttempts && low <= high; attempt++) {
+      const quality = Math.floor((low + high) / 2);
+      const candidate = await encode(quality);
+      consider(candidate);
+      if (candidate.blob.size > targetBytes) high = quality - 1;
       else low = quality + 1;
     }
-    return { blob: closest.blob, quality: closest.quality, targetUsed: true };
+    return fitting || smallest;
+  }
+
+  async function compressToTarget(item, settings) {
+    const canvas = await buildCanvas(item, settings.maxWidth);
+    let best = await encodeForTarget(canvas, settings);
+    if (!settings.targetBytes || !settings.autoResize || best.blob.size <= settings.targetBytes) return best;
+
+    const minScale = Math.max(Math.min(MIN_DIMENSION, canvas.width) / canvas.width, Math.min(MIN_DIMENSION, canvas.height) / canvas.height);
+    const resizeAttempts = settings.type === "image/avif" ? 3 : MAX_RESIZE_ATTEMPTS;
+    let scale = 1;
+    for (let attempt = 0; attempt < resizeAttempts && scale > minScale; attempt++) {
+      const factor = Math.max(0.35, Math.min(0.8, Math.sqrt(settings.targetBytes / best.blob.size) * 0.9));
+      scale = attempt === resizeAttempts - 1 ? minScale : Math.max(minScale, scale * factor);
+      const resized = document.createElement("canvas");
+      resized.width = Math.max(1, Math.round(canvas.width * scale));
+      resized.height = Math.max(1, Math.round(canvas.height * scale));
+      // Draw from the initial canvas, avoiding compounded resampling and repeated source decodes.
+      const context = resized.getContext("2d");
+      context.imageSmoothingQuality = "high";
+      context.drawImage(canvas, 0, 0, resized.width, resized.height);
+      const candidate = await encodeForTarget(resized, settings);
+      if (candidate.blob.size <= settings.targetBytes) return candidate;
+      if (candidate.blob.size < best.blob.size) best = candidate;
+    }
+    return best;
   }
 
   async function processItem(item, settings) {
@@ -334,17 +422,20 @@
     render();
 
     try {
-      const canvas = await buildCanvas(item, settings.maxWidth);
-      const encoded = await encodeForTarget(canvas, settings.type, settings.quality, settings.targetBytes);
+      const encoded = await compressToTarget(item, settings);
+      if (!state.items.includes(item)) return;
       item.outputBlob = encoded.blob;
       item.outputUrl = URL.createObjectURL(encoded.blob);
       item.outputName = `${baseName(item.file.name)}-compressed.${outputExtension(settings.type)}`;
-      item.outputWidth = canvas.width;
-      item.outputHeight = canvas.height;
+      item.outputWidth = encoded.width;
+      item.outputHeight = encoded.height;
       item.outputQuality = encoded.quality;
-      item.targetUsed = encoded.targetUsed;
-      item.status = "complete";
-      item.statusText = encoded.targetUsed ? `${copy.complete} · ${copy.targetClosest}` : copy.complete;
+      item.settings = settings;
+      const unmet = settings.targetBytes > 0 && encoded.blob.size > settings.targetBytes;
+      item.status = unmet ? "unmet" : "complete";
+      item.statusText = settings.targetBytes
+        ? `${unmet ? copy.targetUnmet : copy.targetMet}: ${encoded.blob.size} B / ${copy.targetLimit} ${settings.targetBytes} B${unmet ? ` · ${copy.targetRetry}` : ""}`
+        : copy.complete;
     } catch (error) {
       item.status = "error";
       item.error = error.message || copy.failed;
@@ -354,14 +445,20 @@
 
   function currentSettings() {
     const width = Math.max(1, Math.min(16000, Number(elements.maxWidth.value) || 1920));
-    const targetKb = Math.max(0, Math.min(50000, Number(elements.target.value) || 0));
-    elements.maxWidth.value = width;
-    if (targetKb) elements.target.value = targetKb;
+    const raw = elements.target.value.trim();
+    const parts = raw.split(".");
+    // Decimal KB, parsed as integer bytes so a hard limit is never rounded upward.
+    const targetBytes = raw ? Number(parts[0]) * 1000 + Number((parts[1] || "").padEnd(3, "0")) : 0;
+    if (elements.target.validity.badInput || (raw && (!/^\d+(?:\.\d{1,3})?$/.test(raw) || targetBytes < 1 || targetBytes > 50000000))) {
+      throw new Error(copy.targetInvalid);
+    }
     return {
       type: elements.format.value,
       quality: Number(elements.quality.value),
       maxWidth: width,
-      targetBytes: targetKb ? targetKb * 1024 : 0
+      targetBytes,
+      autoResize: elements.autoResize.checked,
+      background: elements.background.value
     };
   }
 
@@ -372,9 +469,18 @@
       setNotice(copy.noOutput);
       return;
     }
+    let settings;
+    try {
+      settings = currentSettings();
+      elements.target.removeAttribute("aria-invalid");
+    } catch (error) {
+      elements.target.setAttribute("aria-invalid", "true");
+      setNotice(error.message);
+      elements.target.focus();
+      return;
+    }
     setNotice("");
     setBusy(true);
-    const settings = currentSettings();
     for (const item of processable) {
       await processItem(item, settings);
       await new Promise(resolve => requestAnimationFrame(resolve));
@@ -459,13 +565,19 @@
     if (!item.outputBlob) return "";
     const difference = 1 - item.outputBlob.size / item.file.size;
     const direction = difference >= 0 ? copy.smaller : copy.larger;
-    return `${copy.output}: ${formatBytes(item.outputBlob.size)} · ${Math.abs(difference * 100).toFixed(1)}% ${direction} · ${item.outputWidth} x ${item.outputHeight}`;
+    const settings = item.settings;
+    const quality = settings.type === "image/png"
+      ? (pngColors(item.outputQuality) ? `${copy.colors}: ${pngColors(item.outputQuality)}` : copy.lossless)
+      : `${copy.quality}: ${item.outputQuality}%`;
+    const background = settings.type === "image/jpeg" ? ` · ${copy.background}: ${settings.background}` : "";
+    return `${copy.output}: ${item.outputBlob.size} B · ${Math.abs(difference * 100).toFixed(1)}% ${direction} · ${item.outputWidth} x ${item.outputHeight} · ${outputExtension(settings.type).toUpperCase()} · ${quality}${background}`;
   }
 
   function createItemElement(item) {
     const article = document.createElement("article");
     article.className = "item";
     article.dataset.id = item.id;
+    article.dataset.status = item.status;
     article.innerHTML = `
       <div class="item-head"><strong class="item-name"></strong><button class="remove" type="button" data-action="remove" title="${copy.remove}" aria-label="${copy.remove}">&times;</button></div>
       <div class="compare"><img class="compare-before" alt=""><img class="compare-after" alt=""><span class="compare-label before">${copy.original}</span><span class="compare-label after">${copy.compressed}</span><input class="compare-control" type="range" min="0" max="100" value="50" aria-label="${copy.original} / ${copy.compressed}"></div>
@@ -485,6 +597,13 @@
     const status = article.querySelector(".item-status");
     status.textContent = item.error || item.statusText;
     if (item.status === "error") status.classList.add("error");
+    if (item.status === "unmet") status.classList.add("unmet");
+    if (item.outputBlob) {
+      let changed = true;
+      try { changed = JSON.stringify(item.settings) !== JSON.stringify(currentSettings()); } catch (_) { /* Invalid edits do not change the existing output. */ }
+      if (changed) status.textContent += ` · ${copy.changed}`;
+    }
+    // Transfer integration: append per-result actions here; resolve the current item in the delegated click handler below.
     article.querySelector('[data-action="download"]').disabled = !item.outputBlob || state.busy;
     article.querySelector('[data-action="remove"]').disabled = state.busy;
     return article;
@@ -502,6 +621,8 @@
     const difference = (1 - output / original) * 100;
     const summaryLabel = difference >= 0 ? copy.totalSaved : copy.totalIncreased;
     elements.summary.textContent = `${summaryLabel}: ${formatBytes(original)} -> ${formatBytes(output)} (${Math.abs(difference).toFixed(1)}%)`;
+    const unmet = completed.filter(item => item.status === "unmet").length;
+    if (unmet) elements.summary.textContent += ` · ${unmet} ${copy.unmetCount}`;
     elements.downloadZip.hidden = completed.length < 2;
     elements.downloadZip.textContent = isZh ? `下载 ZIP（${completed.length}）` : `Download ZIP (${completed.length})`;
   }
@@ -512,6 +633,7 @@
     renderSummary();
     elements.compressAll.disabled = state.busy || !state.items.some(item => item.width > 0 && item.sourceBlob);
     elements.backgroundField.hidden = elements.format.value !== "image/jpeg";
+    document.dispatchEvent(new Event("imageprivacy:change"));
   }
 
   elements.file.addEventListener("change", event => addFiles(event.target.files));
@@ -527,7 +649,21 @@
   });
   elements.quality.addEventListener("input", () => {
     elements.qualityOutput.value = `${elements.quality.value}%`;
+    render();
   });
+  elements.targetPreset.addEventListener("change", () => {
+    const value = elements.targetPreset.value;
+    if (value !== "custom") elements.target.value = value;
+    else elements.target.focus();
+    elements.target.removeAttribute("aria-invalid");
+    render();
+  });
+  elements.target.addEventListener("input", () => {
+    elements.targetPreset.value = ["", "200", "500", "1000"].includes(elements.target.value) ? elements.target.value : "custom";
+    elements.target.removeAttribute("aria-invalid");
+    render();
+  });
+  for (const input of [elements.maxWidth, elements.background, elements.autoResize]) input.addEventListener("input", render);
   elements.format.addEventListener("change", render);
   elements.compressAll.addEventListener("click", compressAll);
   elements.downloadZip.addEventListener("click", downloadZip);
@@ -550,6 +686,15 @@
       if (item.outputUrl) URL.revokeObjectURL(item.outputUrl);
     }
   });
+
+  window.ImagePrivacyEditor = {
+    load: async (file, options = {}) => Boolean(await addFiles([file], options)),
+    outputs: () => state.items.filter(item => item.outputBlob).map(item => {
+      // Cross-tool copies must not propagate potentially identifying source filenames.
+      const name = `compressed-${item.id}.${outputExtension(item.outputBlob.type)}`;
+      return { id: item.id, name, file: new File([item.outputBlob], name, { type: item.outputBlob.type }) };
+    })
+  };
 
   render();
   elements.file.disabled = false;

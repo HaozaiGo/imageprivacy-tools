@@ -10,7 +10,7 @@
   <link rel="alternate" hreflang="en" href="https://compress.imageprivacy.org/">
   <link rel="alternate" hreflang="zh-CN" href="https://compress.imageprivacy.org/zh/">
   <link rel="alternate" hreflang="x-default" href="https://compress.imageprivacy.org/">
-  <link rel="stylesheet" href="/app.css?v=3">
+  <link rel="stylesheet" href="/app.css?v=4">
   <title>Batch Image Compressor | Compress HEIC, PNG, JPEG, WebP, AVIF</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Image Compressor","url":"https://compress.imageprivacy.org/","applicationCategory":"MultimediaApplication","operatingSystem":"All","browserRequirements":"Requires JavaScript and WebAssembly","isAccessibleForFree":true,"description":"Batch compress HEIC, JPEG, PNG, WebP, and AVIF images locally in the browser, compare output quality, and download individual files or a ZIP archive.","featureList":["Batch image compression","HEIC decoding","JPEG, WebP, PNG, and AVIF export","Target file size","Before and after comparison","ZIP download","Local browser processing"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"ImagePrivacy","url":"https://imageprivacy.org/"}}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5333037258750046" crossorigin="anonymous"></script>
@@ -35,8 +35,9 @@
           <div class="field"><label for="format">Output format</label><select id="format"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option><option value="image/avif">AVIF</option></select></div>
           <div class="field"><label for="quality">Quality <output id="q" for="quality">75%</output></label><input id="quality" type="range" min="30" max="95" value="75"></div>
           <div class="field"><label for="maxw">Maximum width</label><input id="maxw" type="number" min="1" max="16000" value="1920"><small>Images are never enlarged.</small></div>
-          <div class="field"><label for="target">Target size (KB)</label><input id="target" type="number" min="1" max="50000" placeholder="Optional"><small>The closest practical result is used.</small></div>
+          <div class="field target-field"><label for="target">Target ceiling (KB)</label><div class="target-controls"><select id="target-preset" aria-label="Target preset"><option value="">No target</option><option value="200">200 KB</option><option value="500">500 KB</option><option value="1000">1 MB</option><option value="custom">Custom</option></select><input id="target" type="number" min="0.001" max="50000" step="0.001" placeholder="Optional" aria-describedby="target-unit"></div><small id="target-unit">1 KB = 1000 bytes · 1 MB = 1000000 bytes</small></div>
           <div id="background-field" class="field"><label for="background">JPEG background</label><input id="background" type="color" value="#ffffff"><small>Applied to transparent images.</small></div>
+          <label class="resize-option" for="auto-resize"><input id="auto-resize" type="checkbox">Auto-reduce dimensions to meet target <span>Minimum 64 px per side; smaller sources stay unchanged.</span></label>
         </section>
         <div class="toolbar">
           <button id="compress-all" class="button primary" type="button">Compress all</button>
@@ -54,10 +55,10 @@
       <section><h2>How local compression works</h2><p>The browser decodes each source, optionally resizes it, and creates a new output. JPEG and WebP use quality-based encoding, PNG uses color quantization, and AVIF uses a local WebAssembly encoder.</p></section>
       <section><h2>Choosing an output format</h2><p>Use JPEG for photographs and broad compatibility, WebP for efficient modern web images, PNG for transparency and interface graphics, or AVIF when the destination supports newer formats.</p></section>
       <section><h2>HEIC photos</h2><p>HEIC and HEIF files are decoded locally before compression. The exported public copy can use a more widely accepted format without sending the original photo to a server.</p></section>
-      <section><h2>Quality and target size</h2><p>Start around 75% quality and set the largest width the destination needs. An optional target size makes several local encoding attempts and keeps the closest practical result.</p></section>
+      <section><h2>Quality and target size</h2><p>A target is a byte ceiling, not an approximate size. The compressor tries lower quality first. Optional automatic resizing makes up to six dimension reductions, keeping each side at least 64 pixels unless already smaller. Results report actual bytes, dimensions, and encoding settings.</p></section>
       <section><h2>Compare before downloading</h2><p>Use the comparison slider on each completed image to inspect text, faces, product details, gradients, and sharp edges. File-size savings alone do not guarantee an acceptable result.</p></section>
       <section><h2>Privacy and metadata</h2><p>Re-encoding creates a metadata-light copy, but compression does not hide visible private details. Redact secrets first and use the EXIF tool when metadata removal needs separate verification.</p></section>
-      <section><h2>Frequently asked questions</h2><p><strong>Is the target size exact?</strong><br>No. Image content and encoder limits affect the final size, so the tool reports the closest result it can produce without changing dimensions beyond your settings.</p><p><strong>Does batch processing upload my files?</strong><br>No. Processing and ZIP creation happen in the browser tab.</p></section>
+      <section><h2>Frequently asked questions</h2><p><strong>Is the target size guaranteed?</strong><br>No. A result is marked “Target met” only when its actual bytes are at or below the ceiling. If the bounded search cannot meet it, the smallest attempted file remains available with a “Target not met” warning. Dimensions are only reduced beyond your maximum-width setting when you opt in.</p><p><strong>Does batch processing upload my files?</strong><br>No. Processing and ZIP creation happen in the browser tab.</p></section>
     </div>
     <footer><a href="https://imageprivacy.org/privacy/">Privacy</a> · <a href="https://imageprivacy.org/terms/">Terms</a></footer>
   </main>
@@ -66,6 +67,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js"></script>
-  <script defer src="/app.js?v=3"></script>
+  <link rel="stylesheet" href="/workflow.css">
+  <script defer src="/workflow.js"></script>
+  <script defer src="/app.js?v=4"></script>
+  <script defer src="/workflow-adapter.js"></script>
 </body>
 </html>
