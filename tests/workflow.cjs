@@ -66,6 +66,9 @@ async function next(page, target) {
   const pending = page.waitForEvent('popup');
   await page.click('#ip-continue');
   const child = await pending;
+  // A popup exists before its remote scripts are loaded. Check readiness separately
+  // from the transfer assertion so network startup is not mistaken for data loss.
+  await child.waitForLoadState('domcontentloaded', { timeout: 30000 });
   await expect(child.locator('.ip-transfer-status')).toHaveText(/Edited image received|已接收处理后的图片/);
   assert(!child.url().includes('#'), 'Transfer token must be removed after initialization');
   await expect(page.locator('.ip-transfer-status')).toHaveText(/open in the next tool|已在下一工具/);
@@ -138,6 +141,7 @@ async function guards() {
     const pending = source.waitForEvent('popup');
     await source.evaluate(token => window.open(`https://resize.imageprivacy.org/#ip-transfer=${token}&from=redact`), token);
     const child = await pending;
+    await child.waitForLoadState('domcontentloaded', { timeout: 30000 });
     await expect(child.locator('.ip-transfer-status')).toHaveText('Receiving image...');
     await child.evaluate(({ token, base64 }) => {
       const file = new File([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], 'test.png', { type: 'image/png' });

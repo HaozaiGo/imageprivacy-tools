@@ -56,6 +56,23 @@ The report contains per-page results and fails the command when issues remain.
 Passing these checks is evidence of technical readiness, not an AdSense approval
 or a substitute for Google's content review.
 
+## Privacy Entry Points
+
+`shared/privacy-controls.js` is copied into all seven independently deployed apps.
+After changing it, run `npm run sync:privacy`; `npm run check` detects stale copies.
+The adapter reopens the provider on the current origin when available and otherwise
+keeps a visible, language-preserving policy link. It is not a CMP or consent store.
+
+```bash
+npm run test:privacy
+npm run test:privacy -- --toolkit-root ..
+```
+
+Tests cover canonical-page markup, absent/late/failing providers, keyboard and
+modified clicks, and no-JavaScript navigation. They block third-party requests;
+real CMP publication and regional ad-request gating require separate verification.
+Deploy all affected apps; deploying only the homepage does not update tool origins.
+
 ## Local Image Workflow
 
 ```bash

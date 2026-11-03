@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 require("node:child_process").execFileSync(process.execPath, [path.join(__dirname, "sync-workflow.cjs"), "--check"], { stdio: "inherit" });
+require("node:child_process").execFileSync(process.execPath, [path.join(__dirname, "sync-privacy.cjs"), "--check"], { stdio: "inherit" });
 
 const apps = [
   ["home", "https://imageprivacy.org/"],
