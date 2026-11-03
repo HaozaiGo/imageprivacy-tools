@@ -1,0 +1,64 @@
+name: Site quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-quality-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify sites
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out ImagePrivacy test infrastructure
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: HaozaiGo/imageprivacy-tools
+          ref: ${{ github.repository == 'HaozaiGo/imageprivacy-tools' && github.sha || 'main' }}
+          path: imageprivacy-tools
+          persist-credentials: false
+      - name: Check out ToolkitBox network and exact caller revision
+        env:
+          CALLER_REPOSITORY: ${{ github.repository }}
+          CALLER_SHA: ${{ github.sha }}
+          CALLER_REF: ${{ github.ref }}
+        run: node imageprivacy-tools/scripts/ci-checkouts.cjs
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: imageprivacy-tools/package-lock.json
+      - name: Install locked test dependencies
+        working-directory: imageprivacy-tools
+        run: npm ci
+      - name: Install browser
+        working-directory: imageprivacy-tools
+        run: npx playwright install --with-deps chrome
+      - name: Static, privacy, functional and bilingual checks
+        working-directory: imageprivacy-tools
+        run: npm run test:ci
+      - name: Preserve verification reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site-quality-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            /tmp/two-sites-ci-audit.json
+            /tmp/two-sites-privacy-tests.json
+            /tmp/imageprivacy-app-smoke
+            /tmp/imageprivacy-codec-smoke
+            /tmp/converter-*.png
+            /tmp/imageprivacy-workflow
+            /tmp/imageprivacy-compress-target

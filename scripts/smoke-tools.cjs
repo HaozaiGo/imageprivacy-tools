@@ -1,5 +1,5 @@
 // Default: isolated Chrome and loopback-only ephemeral servers.
-// --codecs: bounded HEIC/PNG/ZIP checks with real CDN dependencies.
+// --codecs: bounded HEIC/PNG/ZIP checks with real vendored dependencies.
 // --online: target public app origins instead of starting local servers.
 // --readiness: hold each app script and verify both language upload gates.
 const assert = require('node:assert/strict');
@@ -68,7 +68,8 @@ const codecUrls = new Set([
   'https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.js',
   'https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js'
 ]);
-const heicProvenance = {
+const upstreamHeic = {
+  name: 'upstream-demo-1.heic',
   repository: 'https://github.com/alexcorvi/heic2any',
   commit: '3428539e643e112323a5b8a2c77c6402cb1372f6',
   path: 'demo/1.heic',
@@ -78,6 +79,12 @@ const heicProvenance = {
   bytes: 41389,
   width: 1440, height: 960,
   dimensionsVerifiedWith: 'macOS sips -g pixelWidth -g pixelHeight -g format'
+};
+const heicProvenance = process.env.HEIC_FIXTURE ? upstreamHeic : {
+  name: 'synthetic.heic', source: 'tests/fixtures/synthetic.heic',
+  sha256: 'd23ca353b9d719a28fc824a784bff605ebd47ee818d2680366375fa7133c044e',
+  bytes: 2260, width: 1440, height: 960,
+  generatedWith: 'Canvas geometric shapes, encoded by macOS sips; no personal image data'
 };
 
 async function networkPolicy(context, origin, label) {
@@ -100,16 +107,14 @@ async function heicFixture() {
   if (process.env.HEIC_FIXTURE) {
     buffer = await fs.readFile(process.env.HEIC_FIXTURE);
   } else {
-    const response = await fetch(heicProvenance.url, { signal: AbortSignal.timeout(30000), redirect: 'error' });
-    assert(response.ok, `HEIC fixture fetch failed: HTTP ${response.status}`);
-    buffer = Buffer.from(await response.arrayBuffer());
+    buffer = await fs.readFile(path.join(__dirname, '../tests/fixtures/synthetic.heic'));
   }
   assert.equal(buffer.length, heicProvenance.bytes);
   assert.equal(createHash('sha256').update(buffer).digest('hex'), heicProvenance.sha256, 'HEIC fixture must match pinned upstream sample');
   assert.equal(buffer.toString('ascii', 4, 8), 'ftyp');
-  await fs.writeFile(path.join(artifacts, 'upstream-demo-1.heic'), buffer);
+  await fs.writeFile(path.join(artifacts, heicProvenance.name), buffer);
   await fs.writeFile(path.join(artifacts, 'fixture-provenance.json'), JSON.stringify(heicProvenance, null, 2) + '\n');
-  return { name: 'upstream-demo-1.heic', mimeType: 'image/heic', buffer };
+  return { name: heicProvenance.name, mimeType: 'image/heic', buffer };
 }
 
 async function serve(app) {
@@ -255,6 +260,23 @@ async function runRaceCase(browser, app, origin, fixtures) {
   try {
     await page.goto(origin);
     await waitForUploadReady(page, app);
+    if (app === 'convert') {
+      // Hold delivery from the first real worker, then deliver it after replacement.
+      await page.evaluate(() => {
+        const WorkerBase = window.Worker;
+        let first = true;
+        window.Worker = class extends WorkerBase {
+          constructor(...args) { super(...args); this.hold = first; first = false; }
+          set onmessage(callback) {
+            super.onmessage = event => {
+              if (this.hold && event.data.type === 'ready') {
+                window.releaseDecode = () => { callback(event); window.heldDecodeFinished = true; };
+              } else callback(event);
+            };
+          }
+        };
+      });
+    } else {
     // Hold exactly one genuine browser decode to reproduce out-of-order completion.
     await page.evaluate(compressor => {
       const target = compressor ? window : HTMLImageElement.prototype;
@@ -270,6 +292,7 @@ async function runRaceCase(browser, app, origin, fixtures) {
         return value;
       };
     }, app === 'compress');
+    }
     const input = ['exif', 'watermark'].includes(app) ? '#file-input' : '#file';
     const ready = app === 'compress' ? '[data-action="download"]' : app === 'exif' ? '[onclick="stripExif()"]' : app === 'watermark' ? '[onclick="downloadImage()"]' : '#download';
     const first = app === 'compress' ? Array.from({ length: 19 }, (_, i) => ({ ...fixtures.png, name: `queued-${i}.png` })) : fixtures.png;
@@ -393,7 +416,7 @@ async function runCase(browser, app, origin, zh, mobile, fixtures) {
       await expect(page.locator('.toast').last()).toContainText(zh ? '请选择图片文件' : 'Please choose an image file');
       await expect(page.locator(ready)).not.toBeVisible();
     } else {
-      await expect(page.locator('#meta')).toContainText(zh ? '无法在浏览器中解码' : 'could not be decoded');
+      await expect(page.locator('#meta')).toContainText(app === 'convert' ? (zh ? '请选择 HEIC' : 'Choose a HEIC') : (zh ? '无法在浏览器中解码' : 'could not be decoded'));
       await expect(page.locator(ready)).toBeDisabled();
     }
 
@@ -439,7 +462,7 @@ async function runCase(browser, app, origin, zh, mobile, fixtures) {
       assert.equal((await pixels(page, png.buffer, 'image/png')).corner[3], 0);
       if (!allowCodecs) {
         await page.locator(input).setInputFiles({ name: 'photo.heic', mimeType: 'image/heic', buffer: Buffer.from('heic') });
-        await expect(page.locator('#meta')).toContainText(zh ? 'HEIC 解码器加载失败' : 'HEIC decoder failed to load');
+        await expect(page.locator('#meta')).toContainText(zh ? '无法在浏览器中解码' : 'could not be decoded');
         await expect(page.locator(ready)).toBeDisabled();
       }
     }
@@ -474,7 +497,7 @@ async function runCase(browser, app, origin, zh, mobile, fixtures) {
 }
 
 async function runCodecCase(browser, app, origin, zh, fixtures) {
-  const label = `${app}-${zh ? 'zh' : 'en'}-cdn-codecs`;
+  const label = `${app}-${zh ? 'zh' : 'en'}-real-codecs`;
   const context = await browser.newContext({ acceptDownloads: true, serviceWorkers: 'block' });
   await networkPolicy(context, origin, label);
   const page = await context.newPage();
@@ -487,18 +510,12 @@ async function runCodecCase(browser, app, origin, zh, fixtures) {
     await page.goto(origin + (zh ? '/zh/' : '/'), { waitUntil: 'load' });
     await waitForUploadReady(page, app);
     if (app === 'convert') {
-      assert.equal(await page.evaluate(() => typeof window.heic2any), 'function', 'Real CDN HEIC decoder must load');
-      await page.evaluate(() => {
-        window.codecCalls = 0;
-        const decode = window.heic2any;
-        window.heic2any = function (...args) { window.codecCalls++; return decode.apply(this, args); };
-      });
+      assert.equal(await page.evaluate(() => typeof window.heic2any), 'undefined', 'No eager CDN decoder');
       const chooser = page.waitForEvent('filechooser');
       await page.locator('.drop').click();
       await (await chooser).setFiles(fixtures.heic);
       await expect(page.locator('#download')).toBeEnabled({ timeout: 45000 });
       await expect(page.locator('#meta')).toContainText('1440 x 960');
-      assert.equal(await page.evaluate(() => window.codecCalls), 1);
       for (const type of ['image/png', 'image/jpeg', 'image/webp']) {
         await page.selectOption('#format', type);
         const output = await download(page, '#download', label);
@@ -509,7 +526,7 @@ async function runCodecCase(browser, app, origin, zh, fixtures) {
         evidence.downloads.push({ filename: output.filename, bytes: output.buffer.length, ...decoded });
       }
       evidence.fixtureSha256 = heicProvenance.sha256;
-      evidence.decoderCalls = await page.evaluate(() => window.codecCalls);
+      evidence.decoder = 'same-origin libheif-js worker';
     } else if (app === 'compress') {
       const libraries = await page.evaluate(() => ({ upng: typeof window.UPNG?.encode, pako: typeof window.pako?.deflate, zip: typeof window.JSZip, pica: typeof window.pica }));
       assert.deepEqual(libraries, { upng: 'function', pako: 'function', zip: 'function', pica: 'function' });
@@ -555,15 +572,28 @@ async function runCodecCase(browser, app, origin, zh, fixtures) {
       evidence.zipEntries = entries.map(entry => entry.name);
       evidence.codecCalls = await page.evaluate(() => window.codecCalls);
       assert.deepEqual(evidence.codecCalls, { png: 2, zip: 1 });
+      assert.equal(await page.evaluate(() => typeof window.heic2any), 'undefined', 'PNG compression does not load HEIC');
+      await page.locator('#clear-all').click();
+      await page.locator('#file').setInputFiles(fixtures.heic);
+      await expect(page.locator('.item-meta')).toContainText('1440 x 960');
+      await page.selectOption('#format', 'image/jpeg');
+      await page.fill('#maxw', '1440');
+      await page.locator('#compress-all').click();
+      await expect(page.locator('[data-action="download"]')).toBeEnabled();
+      const heicOutput = await download(page, '[data-action="download"]', label + '-heic');
+      const heicPixels = await pixels(page, heicOutput.buffer, 'image/jpeg');
+      assert.equal(heicPixels.width, 1440); assert.equal(heicPixels.height, 960);
+      assert.notDeepEqual(heicPixels.center, heicPixels.corner);
+      evidence.heic = { bytes: heicOutput.buffer.length, ...heicPixels };
     } else {
       throw new Error('--codecs supports only convert and compress');
     }
     assert.deepEqual(errors, [], 'No uncaught codec errors');
     const dependencyFailures = resources.filter(item => item.label === label && codecUrls.has(item.url) && ((item.event === 'failed' && !item.expectedBlocked) || (item.event === 'response' && item.status >= 400)));
-    assert.deepEqual(dependencyFailures, [], 'Required CDN resources must load successfully');
+    assert.deepEqual(dependencyFailures, [], 'Any permitted remote dependency must load successfully');
     await page.screenshot({ path: path.join(artifacts, `${label}.png`), fullPage: true });
     results.push(evidence);
-    console.log(`PASS ${label}: ${app === 'convert' ? 'genuine HEIC to PNG/JPEG/WebP' : 'CDN PNG encode, resize, ZIP integrity and duplicate filenames'}`);
+    console.log(`PASS ${label}: ${app === 'convert' ? 'genuine HEIC to PNG/JPEG/WebP' : 'local PNG encode, resize, ZIP integrity, duplicate filenames and lazy HEIC'}`);
   } catch (error) {
     results.push({ ...evidence, status: 'fail', error: error.stack, pageErrors: errors });
     await captureFailure(page, label);
@@ -692,7 +722,7 @@ async function main() {
     const malformed = Buffer.from(fixtures.jpeg.buffer);
     malformed.writeUInt32LE(8, 2 + 4 + 6 + 30);
     fixtures.malformedExif = { name: 'malformed-exif.jpg', mimeType: 'image/jpeg', buffer: malformed };
-    if (codecsOnly && apps.includes('convert')) fixtures.heic = await heicFixture();
+    if (codecsOnly && apps.some(app => ['convert', 'compress'].includes(app))) fixtures.heic = await heicFixture();
     for (const fixture of Object.values(fixtures)) await fs.writeFile(path.join(artifacts, fixture.name), fixture.buffer);
     for (const app of apps) {
       const { server, origin } = online ? { server: null, origin: `https://${app}.imageprivacy.org` } : await serve(app);

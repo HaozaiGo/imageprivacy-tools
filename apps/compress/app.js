@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  const assetBase = new URL('.', document.currentScript.src);
+  let heicLoading = null;
+
   const isZh = document.documentElement.lang.toLowerCase().startsWith("zh");
   const copy = isZh ? {
     loading: "正在读取图片...",
@@ -147,7 +150,23 @@
 
   async function prepareSource(file) {
     if (!isHeic(file)) return file;
-    if (!window.heic2any) throw new Error(copy.decoderMissing);
+    if (!window.heic2any) {
+      if (!heicLoading) heicLoading = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = new URL('vendor/heic2any.min.js', assetBase).href;
+        const timer = setTimeout(() => finish(false), 20000);
+        const finish = success => {
+          clearTimeout(timer); script.onload = script.onerror = null;
+          script.remove();
+          if (success && typeof window.heic2any === 'function') resolve();
+          else reject(new Error(copy.decoderMissing));
+        };
+        script.onload = () => finish(true);
+        script.onerror = () => finish(false);
+        document.head.append(script);
+      }).catch(error => { heicLoading = null; throw error; });
+      await heicLoading;
+    }
     const decoded = await window.heic2any({ blob: file, toType: "image/png", quality: 1 });
     return Array.isArray(decoded) ? decoded[0] : decoded;
   }

@@ -20,7 +20,37 @@ Use one GitHub repository and multiple Vercel projects. In Vercel, import this s
 
 This keeps the source code in one repository while preserving separate production domains, canonical URLs, sitemaps, robots files, ads.txt files, and SoftwareApplication structured data for SEO and GEO.
 
-## Local Check
+## Automated Quality Checks
+
+`.github/workflows/site-checks.yml` is the single reusable workflow for this
+network. ImagePrivacy runs it directly on pushes and pull requests; ToolkitBox
+repositories have small callers, not duplicated test definitions. The workflow
+tests the caller's exact commit, checks out the other public repositories, installs
+locked dependencies and Chrome, and runs `npm run test:ci`. No deployment secrets
+or write permissions are provided. Test artifacts are retained for 14 days.
+
+Publish the central workflow to ImagePrivacy before the ToolkitBox caller files.
+Callers intentionally reference this owner's `main` so maintenance is centralized.
+Protect that branch from unreviewed workflow changes. Configure the resulting
+`Verify sites` check as required in each repository's branch rules after its first
+successful GitHub run. A YAML file alone does not enforce branch protection or
+make Vercel wait for checks: Vercel Git auto-deploy remains a separate setting.
+Do not treat CI success as confirmation that the exact commit is live.
+
+```bash
+npm run test:ci
+npm run test:converter
+npm run test:privacy-queue
+```
+
+The full local command expects ToolkitBox sibling checkouts. It includes real
+HEIC conversion using the checked-in, hash-pinned synthetic sample, local tool workflows,
+mobile/bilingual checks, privacy controls, SSL mocks and a full local crawl.
+Ads are blocked. Browser tests need no remote codecs or image fixtures by default.
+Real CMP publication/region behavior remains a separate account-side gate; see
+[the consent checklist](docs/consent-release-checklist.md) for verified blockers.
+
+## Static Check
 
 ```bash
 npm run check
@@ -113,6 +143,16 @@ attempt budgeting uses a controlled encoder, not a real AVIF quality test.
 
 ## Tool Regression Checks
 
+The converter uses a same-origin, pinned libheif worker, loaded only for HEIC.
+It reads native image dimensions with the vendored image-size parser before
+pixel decoding, rejects files above 30 MiB / 24 MP / 8192 pixels per side, and
+checks dimensions again after decoding. A 45-second load deadline and a
+30-second export deadline terminate the worker; cancel/replacement/navigation
+also release it. Only a small preview reaches the main thread. These limits
+reduce memory risk; they are not a guarantee for every device or malformed file.
+Browsers without Worker, OffscreenCanvas or createImageBitmap receive an explicit
+compatibility error. Original files are never modified or uploaded.
+
 ```bash
 npm run test:tools
 npm run test:codecs
@@ -123,9 +163,10 @@ SMOKE_ARTIFACTS=/tmp/imageprivacy-production-codecs npm run test:codecs -- --onl
 
 The tool smoke generates harmless fixtures and checks real downloaded files,
 dimensions, pixel changes, invalid inputs, mobile touch gestures, bilingual
-pages, and asynchronous replacement. The codec mode explicitly allows the
-app's pinned CDN dependencies and fetches one hash-verified HEIC fixture from
-the decoder's upstream repository. It also checks PNG output and ZIP integrity
+pages, and asynchronous replacement. Required compressor libraries now ship
+with the app, with HEIC loaded on demand; optional AVIF encoding still uses its
+existing lazy CDN dependency. The codec mode uses the checked-in synthetic HEIC
+fixture (with an optional hash-verified upstream fixture override). It also checks PNG output and ZIP integrity
 using the installed `unzip` command. Ads remain blocked. Results, dependency
 requests, synthetic downloads, and screenshots are written under `/tmp`.
 The readiness suite delays each application script and checks that native

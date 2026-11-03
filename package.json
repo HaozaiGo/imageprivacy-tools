@@ -7,6 +7,9 @@
     "apps/*"
   ],
   "scripts": {
+    "test:ci": "node scripts/ci.cjs",
+    "test:converter": "node tests/converter.cjs",
+    "test:privacy-queue": "node tests/privacy-queue.cjs",
     "dev": "node scripts/dev-server.cjs",
     "sync:workflow": "node scripts/sync-workflow.cjs",
     "sync:privacy": "node scripts/sync-privacy.cjs",

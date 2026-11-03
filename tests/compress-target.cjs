@@ -173,12 +173,10 @@ async function cancellationChecks(page, fixture) {
 async function testCase(browser, origin, files, zh, mobile) {
   const label = `${zh ? 'zh' : 'en'}-${mobile ? 'mobile' : 'desktop'}`;
   const context = await browser.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width: 1280, height: 900 }, acceptDownloads: true, serviceWorkers: 'block' });
-  // Permit only this page and the exact dependencies already pinned in its HTML.
-  const html = await fs.readFile(path.join(root, 'index.html'), 'utf8');
-  const codecs = new Set(Array.from(html.matchAll(/<script defer src="(https:\/\/cdn\.jsdelivr\.net\/[^\"]+)"/g), match => match[1]));
+  // Required codecs are served locally. CI must not depend on a live CDN.
   await context.route('**/*', route => {
     const url = new URL(route.request().url());
-    return url.origin === origin || codecs.has(url.href) || ['blob:', 'data:'].includes(url.protocol) ? route.continue() : route.abort();
+    return url.origin === origin || ['blob:', 'data:'].includes(url.protocol) ? route.continue() : route.abort();
   });
   const page = await context.newPage();
   page.setDefaultTimeout(20000);

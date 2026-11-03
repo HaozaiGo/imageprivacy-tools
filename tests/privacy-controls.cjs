@@ -32,7 +32,7 @@ for (const source of new Set(sites.map(site => fs.readFileSync(path.join(site.ro
   let listener;
   const status = { textContent: '' };
   const document = { documentElement: { lang: 'en' }, addEventListener: (_, cb) => { listener = cb; }, querySelector: () => status };
-  const window = {};
+  const window = { addEventListener() {} };
   vm.runInNewContext(source, { window, document });
   let calls = 0;
   window.googlefc = { showRevocationMessage() { calls++; } };
@@ -77,11 +77,15 @@ for (const source of new Set(sites.map(site => fs.readFileSync(path.join(site.ro
       for (const lang of ['en', 'zh']) {
         const url = site.origin + (lang === 'zh' ? '/zh/' : '/');
         const fallback = `${site.policy}/${lang === 'zh' ? 'zh/' : ''}privacy/#${site.anchor}`;
-        for (const mode of ['absent', 'late-provider', 'throwing-provider']) {
+        for (const mode of ['absent', 'late-provider', 'throwing-provider', 'delayed-queue', 'stalled-queue']) {
           await page.goto(url, { waitUntil: 'load' });
           if (mode !== 'absent') await page.evaluate(mode => {
             window.privacyTestCalls = 0;
-            window.googlefc = { showRevocationMessage() {
+            window.googlefc = { callbackQueue: { push(entry) {
+              if (mode === 'stalled-queue') return;
+              if (mode === 'delayed-queue') setTimeout(entry.CONSENT_DATA_READY, 200);
+              else entry.CONSENT_DATA_READY();
+            } }, showRevocationMessage() {
               if (mode === 'throwing-provider') throw Error('Provider unavailable');
               window.privacyTestCalls++;
             } };
@@ -90,8 +94,8 @@ for (const source of new Set(sites.map(site => fs.readFileSync(path.join(site.ro
           assert(await control.isVisible(), `${url}: control hidden`);
           await control.focus();
           await page.keyboard.press('Enter');
-          if (mode === 'late-provider') {
-            assert.equal(await page.evaluate(() => window.privacyTestCalls), 1);
+          if (mode === 'late-provider' || mode === 'delayed-queue') {
+            await page.waitForFunction(() => window.privacyTestCalls === 1);
             assert.equal(page.url(), url, 'Provider opened on wrong origin');
           } else {
             await page.waitForURL(fallback);
